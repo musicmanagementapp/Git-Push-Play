@@ -35,7 +35,6 @@ $title = 'Login | GitPushPlay';
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <?php include __DIR__ . '/includes/_header.php'; ?>
 
     <main class="auth-shell">
         <section class="auth-card">
@@ -77,7 +76,5 @@ $title = 'Login | GitPushPlay';
             </div>
         </section>
     </main>
-
-    <?php include __DIR__ . '/includes/_footer.php'; ?>
 </body>
 </html>

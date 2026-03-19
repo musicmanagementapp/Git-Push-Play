@@ -33,8 +33,6 @@ $title = 'Create Account | GitPushPlay';
     
 </head>
 <body>
-    <?php include __DIR__ . '/includes/_header.php'; ?>
-
     <main class="auth-shell">
         <section class="auth-card">
             <h1>Create Account</h1>
@@ -85,6 +83,5 @@ $title = 'Create Account | GitPushPlay';
         </section>
     </main>
 
-    <?php include __DIR__ . '/includes/_footer.php'; ?>
 </body>
 </html>

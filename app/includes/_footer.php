@@ -6,7 +6,7 @@
         </p>
 
         <ul class="footer-links">
-            <li><a href="#">Link 1</a></li>
+            <li><a href="demos.php">Demos</a></li>
             <li><a href="#">Link 2</a></li>
             <li><a href="#">Link 3</a></li>
         </ul>

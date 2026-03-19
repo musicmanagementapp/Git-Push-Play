@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 function users_file_path(): string
 {
-    return __DIR__ . '/secure/users.json';
+    return __DIR__ . '/../../secure/users.json';
 }
 
 function ensure_users_file_exists(): void
