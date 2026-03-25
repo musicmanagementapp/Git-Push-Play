@@ -10,7 +10,7 @@
             <ul>
                 <li><a href="index.php">Home</a></li>
                 <li><a href="demos.php">Demos</a></li>
-                <li><a href="#">Page 2</a></li>
+                <li><a href="artistProfile.php">Artist Profile</a></li>
                 <li><a href="#">Page 3</a></li>
                 <li><a href="#">Page 4</a></li>
             </ul>
