@@ -1,0 +1,280 @@
+:root {
+
+    /* Base Backgrounds */
+    --bg-main: #0b0f1a;
+    --bg-secondary: #111827;
+    --bg-elevated: #1a2235;
+
+    /* Glass / Transparency */
+    --glass-bg: rgba(255,255,255,0.05);
+    --glass-border: rgba(255,255,255,0.12);
+
+    /* Accent Colors */
+    --accent-primary: #4cc9f0;
+    --accent-secondary: #7b61ff;
+    --accent-highlight: #00f5d4;
+
+    /* Text */
+    --text-primary: #f1f5f9;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+
+    /* UI Elements */
+    --border-subtle: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.18);
+
+    /* Glow Effects */
+    --glow-primary: rgba(76,201,240,0.6);
+    --glow-secondary: rgba(123,97,255,0.6);
+
+}
+
+/* 
+=================================
+HEADER STYLES
+=================================
+*/
+
+.site-header{
+    width:100%;
+    background:var(--glass-bg);
+    border-bottom:1px solid var(--border-subtle);
+    backdrop-filter:blur(14px);
+}
+
+.header-container{
+    max-width:1200px;
+    margin:0 auto;
+    height:72px;
+
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+
+    padding:0 40px;
+}
+
+.main-nav{
+    justify-self:center;
+}
+
+.main-nav ul{
+    display:flex;
+    gap:32px;
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+
+.main-nav a{
+    text-decoration:none;
+    color:var(--text-secondary);
+    font-size:14px;
+}
+
+.main-nav a:hover{
+    color:var(--accent-primary);
+}
+
+.primary-btn{
+    padding:10px 18px;
+    background:var(--accent-primary);
+    border:none;
+    border-radius:6px;
+    color:#000;
+    font-weight:600;
+    cursor:pointer;
+}
+
+/*
+=================================
+HOMEPAGE STYLES
+=================================
+*/
+
+body{
+    margin:0;
+    padding:0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:var(--bg-main);
+    color:var(--text-primary);
+}
+.home-page{
+    min-height: calc(100vh - 140px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+.hero{
+    width: 100%;
+    max-width: 900px;
+    padding: 60px 40px;
+    text-align: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.hero h1{
+    margin: 0 0 12px;
+    color: var(--text-primary);
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.hero p{
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 18px;
+}
+/*
+=================================
+FOOTER STYLES
+=================================
+*/
+.site-footer{
+    margin-top:60px;
+    padding:20px 0;
+
+    background:var(--glass-bg);
+    border-top:1px solid var(--border-subtle);
+
+    backdrop-filter:blur(10px);
+}
+
+.footer-container{
+    max-width:1200px;
+    margin:0 auto;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 40px;
+}
+
+.footer-text{
+    margin:0;
+    font-size:13px;
+    color:var(--text-muted);
+}
+
+.footer-links{
+    list-style:none;
+    margin:0;
+    padding:0;
+
+    display:flex;
+    gap:20px;
+}
+
+.footer-links a{
+    text-decoration:none;
+    font-size:13px;
+    color:var(--text-secondary);
+    transition:.25s;
+}
+
+.footer-links a:hover{
+    color:var(--accent-primary);
+}
+
+/*
+=================================
+Login Page STYLES
+=================================
+*/
+        .auth-shell {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .auth-card h1 {
+            margin-bottom: 1rem;
+        }
+
+        .auth-card p {
+            margin-bottom: 1rem;
+        }
+
+        .auth-group {
+            margin-bottom: 1rem;
+        }
+
+        .auth-group label {
+            display: block;
+            margin-bottom: 0.35rem;
+            text-align: left;
+        }
+
+        .auth-group input {
+            width: 100%;
+            max-width: 95%;
+            margin: 0 auto;
+            display: block;
+            
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.16);
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            background: #fff;
+            transition: background 0.3s ease;
+            color: #000;
+        }
+
+        .auth-btn:hover{   
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+
+
+        .auth-message {
+            margin-bottom: 1rem;
+            color: #ffb4b4;
+        }
+
+        .auth-link {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .auth-link a{
+            text-decoration: none;
+            margin-top: 1rem;
+            text-align: center;
+            color: #fff;
+            transition: color 0.3s ease;
+        }
+
+        .auth-link a:hover{
+            color: var(--accent-primary);
+        }
