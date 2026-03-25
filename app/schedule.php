@@ -93,7 +93,7 @@ if (empty($_SESSION['csrf_token'])) {
 
         async function loadData() {
             try {
-                const res = await fetch('assets/libs/CalData_events.php');
+                const res = await fetch('assets/libs/calendar-data-events.php');
                 globalEvents = await res.json();
                 renderEventList();
                 renderCalendar();
