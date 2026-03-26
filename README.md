@@ -89,18 +89,18 @@ include 'includes/_pullinfo.php';
 
 It provides these variables:
 
-| Variable | Type | Contents |
+| Variable | Contents |
 |---|---|---|
-| `$gpUser` | array\|null | User record — `id`, `username`, `email`, `createdAt`, `lastLogin` |
-| `$gpMusician` | array\|null | Musician profile — `stageName`, `firstName`, `lastName`, `city` |
-| `$gpBand` | array\|null | Active band — `name`, `genre`, `formedYear`, `joinCode` |
-| `$gpMembership` | array\|null | User's band membership — `role`, `joinedAt` |
-| `$gpBandMembers` | array | All active band members, each with `['musician']` attached |
-| `$gpIsOwner` | bool | `true` if the user is the band owner/admin |
-| `$gpServices` | array | All linked streaming services |
-| `$gpServiceMap` | array | Same, keyed by `serviceName` for direct lookup |
+| `$gpUser`  | User record — `id`, `username`, `email`, `createdAt`, `lastLogin` |
+| `$gpMusician` | Musician profile — `stageName`, `firstName`, `lastName`, `city` |
+| `$gpBand` | Active band — `name`, `genre`, `formedYear`, `joinCode` |
+| `$gpMembership`  | User's band membership — `role`, `joinedAt` |
+| `$gpBandMembers` | All active band members, each with `['musician']` attached |
+| `$gpIsOwner`  | `true` if the user is the band owner/admin |
+| `$gpServices`  | All linked streaming services |
+| `$gpServiceMap` | Same, use `serviceName` for direct lookup |
 
-`$gpMusician`, `$gpBand`, and `$gpMembership` can be `null` — always use `??` when reading them:
+`$gpMusician`, `$gpBand`, and `$gpMembership` can be `null` use `??` when reading them:
 
 ```php
 $stageName = $gpMusician['stageName'] ?? 'No stage name set';
@@ -117,13 +117,13 @@ $bandName  = $gpBand['name']          ?? 'Not in a band';
 | `create_musician($userId, $fields)` | Create a new musician profile |
 | `update_musician($id, $fields)` | Update stageName, firstName, lastName, city |
 | `find_band_by_id($id)` | Get a band by its ID |
-| `find_band_by_join_code($code)` | Find a band by its 6-char join code |
-| `create_band($ownerMusicianId, $fields)` | Create a band and auto-join the owner |
+| `find_band_by_join_code($code)` | Find a band by its join code |
+| `create_band($ownerMusicianId, $fields)` | Create a band and join the owner |
 | `update_band($id, $fields)` | Update name, genre, formedYear |
 | `join_band_by_code($code, $musicianId)` | Join a band using its join code |
 | `get_active_band_for_musician($musicianId)` | Get the musician's current band |
 | `get_band_members($bandId)` | Get all active members with musician details attached |
-| `remove_band_member($membershipId)` | Remove a member (cannot remove owner) |
+| `remove_band_member($membershipId)` | Remove a member (you can't remove owner) |
 | `get_services_for_musician($musicianId)` | Get all linked services for a musician |
 | `upsert_linked_service($musicianId, $serviceName, $fields)` | Add or update a streaming service link |
 | `create_event($fields)` | Create a new event |
@@ -185,12 +185,3 @@ $description = "Short description.";
 | Reusable HTML partials | `app/includes/_yourpartial.php` |
 
 ---
-
-## Key Rules
-
-- **`_login.php`** — include at the very top of any protected page. Redirects unauthenticated users to `login.php`.
-- **`_pullinfo.php`** — include after `_login.php` on any page that needs user/band/musician data. Do not duplicate that lookup logic in the page itself.
-- **`_meta.php`** — set `$title` and `$description` *before* including it.
-- **`secure/`** — contains JSON files with user data and hashed passwords. Never link to or expose this folder publicly.
-- **CSS variables** — defined under `:root {}` in `style.css`. Use them instead of hardcoded colors to keep the site visually consistent.
-- **`$gp*` prefix** — all variables from `_pullinfo.php` use this prefix to avoid collisions with page-level variables.
