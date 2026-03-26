@@ -8,9 +8,8 @@ This document explains where files live and where to put new ones.
 
 ```
 Git-Push-Play/
-├── app/                  ← All web-facing code lives here
-├── secure/               ← JSON data files (not publicly accessible)
-├── introductions/        ← Team intro text files (you won't need to touch this)
+├── app/                  ← All web code
+├── introductions/        ← Team intro text files
 └── README.md
 ```
 
