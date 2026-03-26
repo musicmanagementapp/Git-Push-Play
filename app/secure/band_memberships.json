@@ -1,0 +1,20 @@
+[
+    {
+        "id": "3a1af8d51b734709",
+        "bandId": "e244065815a0866b",
+        "musicianId": "3aae32debace95f2",
+        "role": "owner",
+        "status": "active",
+        "invitedByMusicianId": "3aae32debace95f2",
+        "joinedAt": "2026-03-26T15:53:28+00:00"
+    },
+    {
+        "id": "c11456c67596035c",
+        "bandId": "e244065815a0866b",
+        "musicianId": "ecccbd993606de30",
+        "role": "member",
+        "status": "active",
+        "invitedByMusicianId": "ecccbd993606de30",
+        "joinedAt": "2026-03-26T15:53:49+00:00"
+    }
+]

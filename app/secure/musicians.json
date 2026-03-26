@@ -1,0 +1,20 @@
+[
+    {
+        "id": "ecccbd993606de30",
+        "userId": "09b8b5097cbc586e",
+        "stageName": "Justinator",
+        "firstName": "Justus",
+        "lastName": "Hibbler",
+        "city": "Ann Arbor",
+        "createdAt": "2026-03-26T15:45:30+00:00"
+    },
+    {
+        "id": "3aae32debace95f2",
+        "userId": "70417855fd5495cb",
+        "stageName": "GitPushPlay",
+        "firstName": "Admin",
+        "lastName": "Profile",
+        "city": "Antarctica",
+        "createdAt": "2026-03-26T15:53:22+00:00"
+    }
+]

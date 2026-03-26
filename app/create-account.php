@@ -7,13 +7,14 @@ $username = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
+    $email    = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     $confirmPassword = $_POST['confirm_password'] ?? '';
 
     if ($password !== $confirmPassword) {
         $message = 'Passwords do not match.';
     } else {
-        $result = create_user($username, $password);
+        $result = create_user($username, $password, $email);
         $message = $result['message'];
 
         if ($result['success']) {
@@ -51,6 +52,16 @@ $title = 'Create Account | GitPushPlay';
                         name="username"
                         value="<?php echo htmlspecialchars($username); ?>"
                         required
+                    >
+                </div>
+
+                <div class="auth-group">
+                    <label for="email">Email <span style="font-size:12px;color:#9ca3af;">(optional)</span></label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="<?php echo htmlspecialchars($email ?? ''); ?>"
                     >
                 </div>
 
