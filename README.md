@@ -69,7 +69,7 @@ app/
 | File | Description |
 |---|---|
 | `_meta.php` | Outputs `<title>` and `<meta>` tags. Set `$title` / `$description` before including. |
-| `_header.php` | Site nav bar. |
+| `_header.php` | Site header. |
 | `_footer.php` | Site footer with links. |
 | `_login.php` | Auth guard. Include at the top of any protected page — redirects if not logged in. |
 | `_pullinfo.php` | Loads all logged-in user data |
@@ -90,7 +90,7 @@ include 'includes/_pullinfo.php';
 It provides these variables:
 
 | Variable | Contents |
-|---|---|---|
+|---|---|
 | `$gpUser`  | User record — `id`, `username`, `email`, `createdAt`, `lastLogin` |
 | `$gpMusician` | Musician profile — `stageName`, `firstName`, `lastName`, `city` |
 | `$gpBand` | Active band — `name`, `genre`, `formedYear`, `joinCode` |
@@ -173,15 +173,16 @@ $description = "Short description.";
 
 ## Where Things Go
 
-| What you're adding | Where it goes |
-|---|---|
-| New page | `app/yourpage.php` |
-| Page-specific CSS | Inline `<style>` block in your page file |
-| Shared / global CSS | `app/assets/css/style.css` |
-| JavaScript | `app/assets/js/main.js` or inline `<script>` |
-| Images / icons | `app/assets/images/` |
-| PHP data functions | `app/assets/libs/data.php` |
-| PHP auth functions | `app/assets/libs/auth.php` |
-| Reusable HTML partials | `app/includes/_yourpartial.php` |
+| What you're adding          | Where it goes                          |
+|-----------------------------|----------------------------------------|
+| New page                    | `app/yourpage.php`                     |
+| Page-specific CSS           | Inline `<style>` block in your page    |
+| Shared / global CSS         | `app/assets/css/style.css`             |
+| JavaScript                  | `app/assets/js/main.js` or inline      |
+| Images / icons              | `app/assets/images/`                   |
+| PHP data functions          | `app/assets/libs/data.php`             |
+| PHP auth functions          | `app/assets/libs/auth.php`             |
+| General PHP helper functions| `app/assets/libs/phpfunctions.php`     |
+| Reusable HTML partials      | `app/includes/_yourpartial.php`        |
 
 ---
