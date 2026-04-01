@@ -13,12 +13,12 @@
 
     <?php include 'includes/_header.php'; ?>
 
-    <main class="home-page">
-        <section class="hero">
-            <h1>Welcome to GitPushPlay</h1>
-            <p>(its working how it should).</p>
-        </section>
-    </main>
+            <div class="auth-link">
+                <a href="create-account.php">Create account</a>
+            </div>
+        </div>
+        <div class="welcome-box">
+            <p>
 
     <?php include 'includes/_footer.php'; ?>
 
