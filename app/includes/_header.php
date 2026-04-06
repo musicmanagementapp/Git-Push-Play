@@ -1,18 +1,14 @@
 <header class="site-header">
     <div class="header-container">
-
-        <div class="brand">
-            <div class="logo"></div>
-            <span class="site-name">GitPushPlay</span>
-        </div>
-
+     <link href="https://fonts.googleapis.com/css2?family=Belleza&display=swap" rel="stylesheet">
         <nav class="main-nav">
             <ul>
                 <li><a href="index.php">Home</a></li>
                 <li><a href="demos.php">Demos</a></li>
-                <li><a href="artist-profile.php">Artist Profile</a></li>
+               <li><a href="bandpage.php">Band Page</a></li>
                 <li><a href="schedule.php">Calendar</a></li>
-                <li><a href="bandpage.php">Band Page</a></li>
+                <li><a href="artist-profile.php">Artist Profile</a></li
+  
             </ul>
         </nav>
 
