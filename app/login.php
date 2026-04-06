@@ -11,13 +11,12 @@ $message = '';
 $username = '';
 
 if (isset($_GET['created']) && $_GET['created'] === '1') {
-    $message = 'Account created successfully. Please log in.';
+    $message = 'Account created successfully. Please log in.';        
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
-
     $result = login_user($username, $password);
     $message = $result['message'];
 
@@ -33,15 +32,21 @@ $title = 'Login | GitPushPlay';
 <head>
     <?php include __DIR__ . '/includes/_meta.php'; ?>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Clicker+Script&family=Imperial+Script&family=Rouge+Script&display=swap" rel="stylesheet">
 </head>
+
 <body>
+        <img src="Purpleblueexplo.png" class="star2">
+</div>
 
     <main class="auth-shell">
         <section class="auth-card">
+
             <div style="justify-content: center">
                 <h1>Login</h1>
                 <p>Sign in with the account you created.</p>
             </div>
+
             <?php if ($message !== ''): ?>
                 <div class="auth-message"><?php echo htmlspecialchars($message); ?></div>
             <?php endif; ?>
@@ -49,6 +54,7 @@ $title = 'Login | GitPushPlay';
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 <div class="auth-group">
                     <label for="username">Username</label>
+
                     <input
                         type="text"
                         id="username"
