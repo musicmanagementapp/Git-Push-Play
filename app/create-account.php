@@ -31,7 +31,7 @@ $title = 'Create Account | GitPushPlay';
 <head>
     <?php include __DIR__ . '/includes/_meta.php'; ?>
     <link rel="stylesheet" href="assets/css/style.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Clicker+Script&family=Imperial+Script&family=Rouge+Script&display=swap" rel="stylesheet">
 </head>
 <body>
     <main class="auth-shell">
@@ -45,7 +45,7 @@ $title = 'Create Account | GitPushPlay';
 
             <form method="post" action="">
                 <div class="auth-group">
-                    <label for="username">Username</label>
+                    <label for="username">Username<span style="font-family: "Belleza", sans-serif;</label>
                     <input
                         type="text"
                         id="username"
@@ -56,7 +56,7 @@ $title = 'Create Account | GitPushPlay';
                 </div>
 
                 <div class="auth-group">
-                    <label for="email">Email <span style="font-size:12px;color:#9ca3af;">(optional)</span></label>
+                    <label for="email">Email <span style="font-family: "Belleza", sans-serif;font-size:12px;color:#9ca3af;">(optional)</span></label>
                     <input
                         type="email"
                         id="email"
@@ -88,8 +88,8 @@ $title = 'Create Account | GitPushPlay';
                 <button class="auth-btn" type="submit">Create Account</button>
             </form>
 
-            <div class="auth-link">
-                <a href="login.php">Already have an account? Log in</a>
+            <div class="auth-link2">
+                <a href="login.php">Already have an account? Log in<style="font-family: "Belleza", sans-serif;"</a>
             </div>
         </section>
     </main>
