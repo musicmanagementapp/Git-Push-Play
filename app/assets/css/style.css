@@ -24,13 +24,15 @@
 GLOBAL
 =================================
 */
-
+p {
+    line-height: 1.6;
+}
 body {
     margin: 0;
     padding: 0;
     font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
     background: var(--bg-main);
-    color: var(--text-primary);
+    color: #a28aad;
 }
 
 /* 
@@ -38,6 +40,7 @@ body {
 HEADER STYLES
 =================================
 */
+
 .site-header {
     width: 100%;
     padding: 20px 0;
@@ -47,117 +50,298 @@ HEADER STYLES
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto 1fr auto; 
     align-items: center;
     padding: 18px 30px;
     background: var(--bg-secondary);
     border-radius: 30px;
+    box-sizing: border-box; 
 }
 
-/* LOGO */
-.logo {
-    font-size: 20px;
+
+/* --- Main Navigation --- */
+.site-header {
+    width: 100%;
+    padding: 20px 0;
+    background: transparent;
 }
 
-/* NAV CENTERED */
+.header-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: 12px 30px;
+    background: black;
+    opacity: 0.8;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+
+/* --- Main Navigation --- */
 .main-nav {
     justify-self: center;
 }
 
     .main-nav ul {
         display: flex;
-        gap: 60px;
+        gap: 40px; 
         list-style: none;
         margin: 0;
         padding: 0;
     }
 
+        .main-nav ul li {
+            display: inline-block;
+        }
+
     .main-nav a {
         text-decoration: none;
-        color: var(--text-primary);
+        color: #fff;
         font-size: 18px;
+        font-weight: 500;
+   
     }
 
-/* RIGHT SIDE EMPTY (keeps spacing like mockup) */
-.header-spacer {
-    width: 40px;
+        .main-nav a:hover {
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+.header-right {
+    justify-self: end;
 }
 
+@media (max-width: 768px) {
+    .header-container {
+        grid-template-columns: auto 1fr;
+        padding: 10px 20px;
+    }
+
+    .main-nav ul {
+        gap: 20px;
+        font-size: 16px;
+    }
+}
 /*
 =================================
-HOMEPAGE
+Landing page (done)
 =================================
 */
-
-.home-page {
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 30px;
-    background: var(--bg-secondary);
-    border-radius: 30px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
 }
 
+body {
+    background: linear-gradient(90deg, #aa83f6,#ffb689);
+    color: white;
+}
 .hero {
-    display: flex;
-    gap: 40px;
-    align-items: flex-start;
+    height: 60vh;
+    position: relative;
+    display: inline-block;
 }
 
-/* LEFT LOGIN BOX */
-
-.hero-left {
-    flex: 1;
-}
-
-.login-box {
-    height: 420px;
-    border: 2px solid var(--border-strong);
-    border-radius: 30px;
-}
-
-/* RIGHT TEXT BOX */
-
-.hero-right {
-    flex: 2;
-}
-
-.welcome-box {
-    height: 420px;
-    border: 2px solid var(--border-strong);
-    border-radius: 0px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.overlay {
+    position: relative;
+    width: 100%;
+    height: 100%;
     text-align: center;
-    padding: 40px;
-    font-size: 20px;
 }
 
-/*
+.silhouette {
+    max-height: 600px;
+    width: 440px;
+    display: block;
+    margin: auto;
+    opacity: 0.89;
+}
+
+.star {
+    position: absolute;
+    width: 120px;
+    top: 41%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+}
+
+.title-box {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: black;
+    padding: 10px 20px;
+    font-family: "Rouge Script", cursive;
+    font-size: 22px;
+    color: #a28aad;
+}
+
+.tagline {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.4);
+    padding: 5px 15px;
+    color: black;
+    font-family: "Belleza", sans-serif;
+}
+    /* FEATURES */
+    .features {
+        display: flex;
+        justify-content: space-around;
+        padding: 40px 20px;
+    }
+
+/* VINYL (note to self- finished)*/
+.vinyl-section {
+    text-align: center;
+    padding: 60px 0;
+    position: relative;
+}
+
+.vinyl {
+    width: 350px;
+}
+
+.text-left,
+.text-right {
+    position: absolute;
+    background: rgba(0,0,0,0.7);
+    padding: 15px 20px;
+    font-size: 40px;
+    font-family: "Imperial Script", cursive;
+}
+
+.text-left {
+    left: 35%;
+    top: 35%;
+}
+
+.text-right {
+    right: 37%;
+    bottom: 35%;
+}
+
+.navigation-bar {
+    display: flex;
+    justify-content: center; /
+    margin: 30px 0;
+    z-index: 10; 
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    gap: 50px; 
+    background-color: rgba(0, 0, 0, 0.65); 
+    padding: 15px 50px;
+    border-radius: 12px;
+    align-items: center;
+}
+
+    .nav-list li a {
+        text-decoration: none;
+        color: #d3cbd2; 
+        font-family: 'Belleza', serif; 
+        font-size: 20px;
+        transition: color 0.3s, transform 0.2s;
+    }
+
+        .nav-list li a:hover {
+            color: #ffffff; 
+            transform: scale(1.1);
+        }
+
+    /* BUTTONS */
+    .actions {
+        display: flex;
+        justify-content: space-around;
+        padding: 30px;
+    }
+
+.btn {
+    padding: 15px 40px;
+    border: none;
+    background: rgba(255,255,255,0.5);
+    color: #bca8c4;
+    font-size: 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: "Belleza", sans-serif;
+}
+
+    .btn:hover {
+        background: #a28aad;
+    }
+
+    .home-page {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 30px;
+        background: var(--bg-secondary);
+        border-radius: 30px;
+    }
+
+    .hero{
+        display: flex;
+        gap: 40px;
+        align-items: flex-start;
+    }
+
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    /*
 =================================
 FOOTER
 =================================
 */
-
-.site-footer {
-    margin-top: 40px;
-    padding: 20px;
-    text-align: center;
-    color: var(--text-muted);
+html, body {
+    height: 100%; 
+    margin: 0;
+    padding: 0;
 }
 
-/*
+body {
+    display: flex;
+    flex-direction: column; 
+    min-height: 100vh; 
+}
+
+main {
+    flex: 1; 
+}
+
+.footer {
+    width: 100%;
+    padding: 20px 0;
+    background: rgba(0,0,0,0.2);
+    text-align: center;
+    font-family: "Belleza", sans-serif;
+    font-size: 16px;
+}
+    /*
 =================================
 LOGIN PAGE
 =================================
 */
 
-.auth-shell {
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    padding: 2rem;
-}
+
+    .auth-shell {
+        min-height:100vh;
+        display: grid;
+        place-items: center;
+        padding: 1rem;
+    }
 
 .auth-card {
     width: 100%;
@@ -167,6 +351,9 @@ LOGIN PAGE
     border-radius: 30px;
     padding: 2rem;
     text-align: center;
+    font-family: "Belleza", sans-serif;
+    color: lavender;
+    font-size: 28px;
 }
 
 .auth-group input {
@@ -176,18 +363,26 @@ LOGIN PAGE
     border: 2px solid var(--border-strong);
     background: transparent;
     color: var(--text-primary);
+    font-family: "Belleza", sans-serif;
 }
 
 .auth-btn {
     width: 100%;
-    padding: 0.9rem;
+    padding:1rem;
     border: 2px solid var(--border-strong);
     border-radius: 20px;
     background: transparent;
     cursor: pointer;
+    font-family: "Belleza", sans-serif;
+    font-size: 22px;
 }
-
-/*
+.star2 {
+    position: fixed;
+    width: 300px;
+    top: 13%;
+    left: 32%;
+}
+    /*
 =================================
 SETTINGS PAGE
 =================================
@@ -199,6 +394,8 @@ SETTINGS PAGE
     padding: 30px;
     background: var(--bg-secondary);
     border-radius: 30px;
+    color: black;
+    font-family: "Tangerine", cursive;
 }
 
 .settings-card {
@@ -206,46 +403,94 @@ SETTINGS PAGE
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 20px;
+    color: black;
+    font-family: "Tangerine", cursive;
 }
 
-.settings-group input {
-    width: 100%;
-    padding: 0.7rem;
-    border-radius: 10px;
-    border: 2px solid var(--border-strong);
-    background: transparent;
-}
-
-/*
+    .settings-group input {
+        width: 100%;
+        padding: 0.7rem;
+        border-radius: 10px;
+        border: 2px solid var(--border-strong);
+        background: transparent;
+    }
+    /*
 =================================
 BAND SECTION
 =================================
 */
 
-.band-info-row,
-.band-member-row {
-    border: 2px solid var(--border-strong);
-    border-radius: 12px;
-    background: transparent;
-}
+    .band-info-row,
+    .band-member-row {
+        border: 2px solid var(--border-strong);
+        border-radius: 12px;
+        background: transparent;
+    }
 
-.band-join-code-block {
-    border: 2px solid var(--border-strong);
-    background: transparent;
-}
+    .band-join-code-block {
+        border: 2px solid var(--border-strong);
+        background: transparent;
+    }
 
-.band-remove-btn,
-.danger-btn {
-    border: 2px solid var(--border-strong);
-    background: transparent;
-}
-
+    .band-remove-btn,
+    .danger-btn {
+        border: 2px solid var(--border-strong);
+        background: transparent;
+    }
 /*
 =================================
-UTILITY
+Create an account page
 =================================
 */
-
-h1, h2, h3 {
-    font-weight: normal;
+.auth-card {
+    font-family: "Belleza", sans-serif;
+    color:lavender;
 }
+
+.auth-group {
+    font-family: "Belleza", sans-serif;
+    color: lavender;
+}
+.auth-btn {
+    font-family: "Belleza", sans-serif;
+    color: lavender;
+}
+
+/* --- Top Navbar --- */
+.top-nav {
+    width: 70%; /* smaller width */
+    max-width: 1000px;
+    margin: 0 auto;
+    background: black;
+    opacity: 0.8;
+    padding: 15px 0;
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    border-radius: 12px;
+}
+
+    .top-nav ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+    }
+
+        .top-nav ul li a {
+            color: #e0d0f0;
+            text-decoration: none;
+            font-size: 18px;
+            font-family: 'Belleza', serif;
+            transition: color 0.3s;
+        }
+
+            .top-nav ul li a:hover {
+                color: #fff;
+            }
+
