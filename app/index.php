@@ -33,7 +33,7 @@
             <li><a href="index.php">Home</a></li>
             <li><a href="demos.php">Demos</a></li>
             <li><a href="bandpage.php">Band Page</a></li>
-            <li><a href="calendar.php">Calendar</a></li>
+            <li><a href="schedule.php">Calendar</a></li>
             <li><a href="artist-profile.php">Artist Profile</a></li>
         </ul>
     </nav>
