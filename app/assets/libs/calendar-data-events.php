@@ -40,10 +40,14 @@ if ($method === 'POST') {
     if ($action === 'create') {
         $title = trim($input['title'] ?? '');
         $date = trim($input['date'] ?? '');
+        $time = trim($input['time'] ?? '');
         $createdBy = trim($input['created_by'] ?? '');
-
-        if (strlen($title) < 3 || empty($date) || empty($createdBy)) {
-            echo json_encode(['success' => false, 'message' => 'Invalid input. Please fill all fields properly.']);
+//
+        $description = trim($input['description']??'');
+        $bandMembers = $input['band_members']??[];
+//
+    if (strlen($title) < 3 || empty($date) || empty($time) || empty($createdBy)) {           
+         echo json_encode(['success' => false, 'message' => 'Invalid input. Please fill all fields properly.']);
             exit;
         }
 
@@ -51,11 +55,51 @@ if ($method === 'POST') {
             'id' => uniqid('evt_'),
             'title' => htmlspecialchars($title), // Sanitize
             'date' => htmlspecialchars($date),
-            'created_by' => htmlspecialchars($createdBy)
+            'time' => htmlspecialchars($time),
+            'created_by' => htmlspecialchars($createdBy),
+
+        //
+            'description' => htmlspecialchars($description),
+            'band_members' => array_map('htmlspecialchars', (array)$bandMembers)
+        //
+
         ];
+
         
         file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT), LOCK_EX);
         echo json_encode(['success' => true, 'message' => 'Event saved successfully.']);
+        exit;
+    }
+
+if ($action === 'update') {
+        $id = $input['id'] ?? '';
+        $title = trim($input['title'] ?? '');
+        $date = trim($input['date'] ?? '');
+        $time = trim($input['time'] ?? '');
+        $createdBy = trim($input['created_by'] ?? '');
+        $description = trim($input['description']??'');
+        $bandMembers = $input['band_members']??[];
+
+        if (empty($id) || strlen($title) < 3 || empty($date) || empty($time) || empty($createdBy)) {
+            echo json_encode(['success' => false, 'message' => 'Invalid input for update.']);
+            exit;
+        }
+
+        foreach ($data as &$event) {
+            if ($event['id'] === $id) {
+                $event['title'] = htmlspecialchars($title);
+                $event['date'] = htmlspecialchars($date);
+                $event['time'] = htmlspecialchars($time);
+                $event['created_by'] = htmlspecialchars($createdBy);
+                $event['description'] = htmlspecialchars($description);
+                $event['band_members'] = array_map('htmlspecialchars', (array)$bandMembers);
+                break; 
+            }
+        }
+        unset($event); 
+        
+        file_put_contents($file, json_encode(array_values($data), JSON_PRETTY_PRINT), LOCK_EX);
+        echo json_encode(['success' => true, 'message' => 'Event updated successfully.']);
         exit;
     }
 
