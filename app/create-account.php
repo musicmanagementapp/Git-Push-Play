@@ -14,6 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($password !== $confirmPassword) {
         $message = 'Passwords do not match.';
+    } elseif ($email !== '' && strpos($email, '@') === false) {
+    $message = 'Email must contain @.';
     } else {
         $result = create_user($username, $password, $email);
         $message = $result['message'];
