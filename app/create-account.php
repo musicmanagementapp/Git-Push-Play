@@ -86,7 +86,6 @@ $title = 'Create Account | GitPushPlay';
                 <div class="auth-group">
                     <label for="email">
                         Email
-                        <span class="auth-optional">(optional)</span>
                     </label>
                     <input
                         type="email"
