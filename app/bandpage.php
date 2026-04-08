@@ -215,8 +215,6 @@ $description = "Manage your band stats, uploads, and schedule.";
 
 </main>
 
-<?php include 'includes/_footer.php'; ?>
-
 <script>
     function showSection(sectionId) {
         const sections = document.querySelectorAll('.section');

@@ -1,5 +1,5 @@
 <?php
-session_start();
+include 'includes/_login.php';
 // token validation
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -173,16 +173,6 @@ td:hover { background: #ad86bf; }
     color: #fff;
 }
 
-/* --- Footer --- */
-.footer {
-    width: 100%;
-    padding: 20px 0;
-    background: rgba(0,0,0,0.2);
-    text-align: center;
-    font-family: "Rouge Script", cursive;
-    font-size: 16px;
-    margin-top: auto;
-}
 
 /* --- Modal Styles --- */
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
@@ -255,10 +245,6 @@ if (basename($_SERVER['PHP_SELF']) != 'index.php') {
             </table>
         </div>
     </div>
-</div>
-
-<div class="footer">
-    <?= date("Y") ?> Gitpushplay
 </div>
 
 <div id="dayModal" class="modal-overlay">

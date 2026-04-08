@@ -17,8 +17,8 @@
 
 <section class="hero">
 
-    <img src="Headphonegirl.png" class="silhouette">
-    <img src="Purpleblueexplo.png" class="star">
+    <img src="assets/images/Headphonegirl.png" class="silhouette">
+    <img src="assets/images/Purpleblueexplo.png" class="star">
 
     <div class="title-box">
         <h1>GitPushPlay</h1>
@@ -42,18 +42,18 @@
 
 <!-- VINYL -->
 <section class="vinyl-section">
-    <div class="text-left">Artist management</div>
+    <div class="text-left" style="border-radius: 15px">Artist management</div>
 
-    <img src="vinyl.png" class="vinyl">
+    <img src="assets/images/vinyl.png" class="vinyl">
 
-    <div class="text-right">Made easy.</div>
+    <div class="text-right" style="border-radius: 15px">Made easy.</div>
 </section>
 
 
-<section class="actions">
+<!-- <section class="actions">
     <button class="btn"><a href="login.php">Login</a></button>
     <button class="btn"><a href="create-account.php">Create Account</a></button>
-</section>
+</section> -->
 
 </body>
 </html>

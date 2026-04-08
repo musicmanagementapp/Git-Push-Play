@@ -148,8 +148,6 @@ $description = "Upload, listen, and share your song drafts with your band.";
         <div class="empty-state"><strong>no demos yet</strong>upload your first track above</div>
     </div>
 </main>
-
-<?php include 'includes/_footer.php'; ?>
 <div id="toast"></div>
 
 

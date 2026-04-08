@@ -1,8 +1,6 @@
 <?php
 include 'includes/_login.php';
 
-session_start();
-
 $title = "Artist Profile";
 $description = "Artist profile management dashboard for GitPushPlay";
 
