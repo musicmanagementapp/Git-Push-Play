@@ -14,5 +14,13 @@
         "passwordHash": "$2y$12$Gtpz4QfhLdLAzdAcroRInOTmjckqdmoC0VknUauypuAjXiXytoLgu",
         "createdAt": "2026-03-26T15:35:29+00:00",
         "lastLogin": "2026-03-26T15:53:45+00:00"
+    },
+    {
+        "id": "f43079014a6fda6c",
+        "email": "jaikman@wccnet.edu",
+        "username": "joshAikman",
+        "passwordHash": "$2y$10$gWA5.LoWISA1zI7EU8ba7uuzT0vp7tR7MmHYCTIiKOh7oXMzqlAjm",
+        "createdAt": "2026-04-09T20:21:06+02:00",
+        "lastLogin": "2026-04-09T20:57:36+02:00"
     }
 ]

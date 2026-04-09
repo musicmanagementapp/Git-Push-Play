@@ -1,194 +1,375 @@
 <?php
-include 'includes/_login.php';
+session_start();
 
-$title = "Artist Profile";
-$description = "Artist profile management dashboard for GitPushPlay";
+$stageName    = $_SESSION['stage_name'] ?? '';
+$title        = trim($stageName) !== '' ? $stageName . ' | Profile' : 'Artist Profile';
+$description  = "Artist profile management dashboard for GitPushPlay";
 
-// --- Handle form submission ---
-$updateMessage = "";
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_SESSION['artist_name'] = htmlspecialchars($_POST['artist_name'] ?? $_SESSION['artist_name']);
-    $_SESSION['stage_name']  = htmlspecialchars($_POST['stage_name'] ?? $_SESSION['stage_name']);
-    $_SESSION['email']       = htmlspecialchars($_POST['email'] ?? $_SESSION['email']);
-    $_SESSION['genre']       = htmlspecialchars($_POST['genre'] ?? $_SESSION['genre']);
-    $_SESSION['band_name']   = htmlspecialchars($_POST['band_name'] ?? $_SESSION['band_name']);
-    $_SESSION['location']    = htmlspecialchars($_POST['location'] ?? $_SESSION['location']);
-    $_SESSION['bio']         = htmlspecialchars($_POST['bio'] ?? $_SESSION['bio']);
+$instrument   = $_SESSION['instrument'] ?? '';
+$genre        = $_SESSION['genre'] ?? '';
+$bandName     = $_SESSION['band_name'] ?? '';
+$location     = $_SESSION['location'] ?? '';
+$bio          = $_SESSION['bio'] ?? '';
+$profileImage = $_SESSION['profile_image'] ?? '';
 
-    $updateMessage = "Profile updated successfully!";
+$successMessage = $_SESSION['profile_success'] ?? '';
+$errorMessage   = $_SESSION['profile_error'] ?? '';
+
+unset($_SESSION['profile_success'], $_SESSION['profile_error']);
+
+function displayValue($value, $placeholder) {
+    return trim($value) !== '' ? $value : $placeholder;
 }
 
-// session-backed placeholders
-$artistName = $_SESSION['artist_name'] ?? $_SESSION['username'] ?? "Demo Artist";
-$stageName  = $_SESSION['stage_name'] ?? "No Stage Name Yet";
-$email      = $_SESSION['email'] ?? "demo@example.com";
-$role       = $_SESSION['role'] ?? "Artist";
-$genre      = $_SESSION['genre'] ?? "Genre not set";
-$bandName   = $_SESSION['band_name'] ?? "No Band Assigned";
-$location   = $_SESSION['location'] ?? "Location not set";
-$bio        = $_SESSION['bio'] ?? "This is a placeholder artist bio.";
-
-// placeholder streaming stats
-$spotifyMonthlyListeners = "24,580";
-$spotifyTopTrack = "Midnight Drive";
-$youtubeSubscribers = "8,420";
-$youtubeViews = "153,900";
+$hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profileImage);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include 'includes/_meta.php'; ?>
     <link rel="stylesheet" href="assets/css/style.css">
+
     <style>
-        /* --- Main Page Layout --- */
-        .profile-page { 
-            padding: 40px 20px;
-            font-family: "Belleza", sans-serif;
-            min-height: calc(100vh - 100px);
+        .profile-toast-container {
+            position: fixed;
+            top: 90px;
+            right: 24px;
+            z-index: 9999;
         }
 
-        /* --- Shell --- */
+        .profile-toast {
+            min-width: 280px;
+            max-width: 380px;
+            padding: 0.95rem 1rem;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(10px);
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.45s ease, transform 0.45s ease;
+        }
+
+        .profile-toast-success {
+            background: rgba(0, 245, 212, 0.14);
+            border: 1px solid rgba(0, 245, 212, 0.32);
+            color: #d7fffa;
+        }
+
+        .profile-toast-error {
+            background: rgba(255, 99, 132, 0.14);
+            border: 1px solid rgba(255, 99, 132, 0.32);
+            color: #ffe1e7;
+        }
+
+        .profile-toast-hide {
+            opacity: 0;
+            transform: translateY(-14px);
+        }
+
+        .profile-toast-close {
+            background: transparent;
+            border: none;
+            color: inherit;
+            font-size: 1.25rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .profile-toast-close:hover {
+            opacity: 0.75;
+        }
+
+        .profile-page {
+            width: 100%;
+        }
+
         .profile-shell {
+            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
+            padding: 0 1rem 2rem;
+            box-sizing: border-box;
         }
 
-        /* Hero Section */
-        .profile-hero {
-            background: black;
-            opacity: 0.7;
-            color: #fff;
-            padding: 40px 20px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        }
-
-        .profile-hero h1 {
-            font-size: 36px;
-            margin: 10px 0;
-        }
-
-        .profile-hero .profile-subtitle {
-            font-size: 18px;
-            opacity: 0.85;
-        }
-
-        /* Grid for Cards */
         .profile-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            width: 100%;
         }
 
-        /* Profile Card */
-        .profile-card {
-            background: #fff;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.3s;
+        .profile-card-wide {
+            width: 100%;
         }
 
-        .profile-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-        }
-
-        .profile-card h2 {
-            margin-bottom: 20px;
-            color: #7d4fff;
-        }
-
-        /* Info List */
-        .info-list {
+        .profile-header-card {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            align-items: center;
+            gap: 0.4rem;
+            width: 100%;
         }
 
-        .info-row {
-            background: #f8eafc;
-            padding: 12px 15px;
-            border-radius: 12px;
+        .profile-image-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-upload-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .profile-avatar-wrap {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 0.2rem auto;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .profile-avatar-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .profile-avatar-placeholder {
+            font-size: 3rem;
+            opacity: 0.7;
+        }
+
+        .profile-avatar-interactive {
+            cursor: pointer;
+        }
+
+        .profile-photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(8, 17, 31, 0.58);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: 0.2s ease;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
             text-align: center;
         }
 
-        .info-key {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
+        .profile-avatar-interactive:hover .profile-photo-overlay,
+        .profile-avatar-interactive:focus-within .profile-photo-overlay {
+            opacity: 1;
         }
 
-        .info-value {
-            font-size: 16px;
-            color: #5a2b80;
-        }
-
-        /* Form Styling */
-        .profile-card-wide form p {
-            margin-bottom: 15px;
-        }
-
-        .profile-card-wide label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #7d4fff;
-        }
-
-        .profile-card-wide input,
-        .profile-card-wide textarea {
+        .photo-action-area {
+            display: none;
+            flex-direction: column;
+            gap: 0.4rem;
             width: 100%;
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-family: "Belleza", sans-serif;
-            font-size: 14px;
-            outline: none;
-            transition: border 0.2s, box-shadow 0.2s;
+            max-width: 240px;
+            margin-top: 0;
         }
 
-        .profile-card-wide input:focus,
-        .profile-card-wide textarea:focus {
-            border-color: #7d4fff;
-            box-shadow: 0 0 5px rgba(125,79,255,0.5);
+        .photo-action-area.active {
+            display: flex;
         }
 
-        .primary-btn {
-            background: linear-gradient(90deg, #7d4fff, #ff914d);
-            color: #fff;
-            padding: 12px 25px;
-            font-size: 16px;
-            font-family: "Belleza", sans-serif;
-            border: none;
+        .photo-action-btn {
+            width: 100%;
+        }
+
+        .photo-file-name {
+            min-height: 20px;
+            font-size: 0.85rem;
+            opacity: 0.78;
+            word-break: break-word;
+            margin-top: 0.15rem;
+            text-align: center;
+        }
+
+        .profile-main-details {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .profile-inline-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: -0.1rem;
+            width: 100%;
+        }
+
+        .profile-inline-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 0.3rem;
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.3s;
+            box-sizing: border-box;
         }
 
-        .primary-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        .profile-inline-row:hover,
+        .profile-inline-row:focus-within {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.14);
+            transform: translateY(-1px);
         }
 
-        /* Streaming Stats */
-        .profile-card h3 {
-            margin-top: 20px;
-            color: #7d4fff;
+        .profile-inline-left {
+            width: 100%;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
 
-        .profile-card p {
-            font-size: 14px;
-            color: #333;
+        .profile-inline-label {
+            display: block;
+            width: 100%;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            opacity: 0.72;
+            text-align: center;
+            letter-spacing: 0.02em;
+        }
+
+        .profile-inline-value {
+            width: 100%;
+            font-size: 0.98rem;
+            line-height: 1.45;
+            word-break: break-word;
+            text-align: center;
+        }
+
+        .profile-placeholder {
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        .profile-edit-form {
+            display: none;
+            margin-top: 0.7rem;
+            width: 100%;
+        }
+
+        .profile-edit-form.active {
+            display: block;
+        }
+
+        .profile-edit-form input,
+        .profile-edit-form textarea {
+            width: 100%;
+            max-width: 100%;
+            padding: 0.75rem 0.9rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.06);
+            color: inherit;
+            outline: none;
+            font: inherit;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .profile-edit-form textarea {
+            resize: vertical;
+            min-height: 110px;
+            text-align: center;
+        }
+
+        .edit-form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 0.65rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn-inline,
+        .secondary-btn-inline {
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            font: inherit;
+        }
+
+        .primary-btn-inline {
+            border: none;
+            background: #4cc9f0;
+            color: #08111f;
+            font-weight: 700;
+            padding: 0.72rem 1rem;
+        }
+
+        .secondary-btn-inline {
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.06);
+            color: inherit;
+            padding: 0.72rem 1rem;
+        }
+
+        .profile-page-title {
+            text-align: center;
+            width: 100%;
+            margin: 0 0 0.1rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .profile-shell {
+                padding: 0 0.75rem 1.5rem;
+            }
+
+            .profile-toast-container {
+                top: 80px;
+                right: 12px;
+                left: 12px;
+            }
+
+            .profile-toast {
+                min-width: 0;
+                max-width: 100%;
+            }
+
+            .profile-avatar-wrap {
+                width: 150px;
+                height: 150px;
+            }
+
+            .profile-inline-row {
+                padding: 0.8rem 0.75rem;
+            }
         }
     </style>
 </head>
-
 <body>
 
 <?php include 'includes/_header.php'; ?>
@@ -196,114 +377,262 @@ $youtubeViews = "153,900";
 <main class="profile-page">
     <section class="profile-shell">
 
-        <!-- HERO -->
-        <section class="profile-hero">
-            <p class="profile-label">Artist Dashboard</p>
-            <h1><?= htmlspecialchars($stageName) ?></h1>
-            <p class="profile-subtitle">
-                Welcome back, <?= htmlspecialchars($artistName) ?>.
-            </p>
-        </section>
+        <?php if ($successMessage !== ''): ?>
+            <div class="profile-toast-container">
+                <div class="profile-toast profile-toast-success" id="success-toast">
+                    <span><?= htmlspecialchars($successMessage) ?></span>
+                    <button type="button" class="profile-toast-close" onclick="closeToast('success-toast')" aria-label="Close message">&times;</button>
+                </div>
+            </div>
+        <?php endif; ?>
 
-        <?php if (!empty($updateMessage)): ?>
-            <p style="text-align:center; color: green; font-weight:bold; margin-bottom:20px;">
-                <?= $updateMessage ?>
-            </p>
+        <?php if ($errorMessage !== ''): ?>
+            <div class="profile-toast-container">
+                <div class="profile-toast profile-toast-error" id="error-toast">
+                    <span><?= htmlspecialchars($errorMessage) ?></span>
+                    <button type="button" class="profile-toast-close" onclick="closeToast('error-toast')" aria-label="Close message">&times;</button>
+                </div>
+            </div>
         <?php endif; ?>
 
         <section class="profile-grid">
-
-            <!-- PROFILE OVERVIEW -->
-            <article class="profile-card">
-                <h2>Profile Overview</h2>
-                <div class="info-list">
-                    <div class="info-row">
-                        <span class="info-key">Full Name</span>
-                        <span class="info-value"><?= htmlspecialchars($artistName) ?></span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-key">Stage Name</span>
-                        <span class="info-value"><?= htmlspecialchars($stageName) ?></span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-key">Email</span>
-                        <span class="info-value"><?= htmlspecialchars($email) ?></span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-key">Role</span>
-                        <span class="info-value"><?= htmlspecialchars($role) ?></span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-key">Band</span>
-                        <span class="info-value"><?= htmlspecialchars($bandName) ?></span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-key">Genre</span>
-                        <span class="info-value"><?= htmlspecialchars($genre) ?></span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- STREAMING STATS -->
-            <article class="profile-card">
-                <h2>Streaming Stats</h2>
-                <div style="text-align:center;">
-                    <h3>Spotify</h3>
-                    <p><strong>Monthly Listeners:</strong><br><?= htmlspecialchars($spotifyMonthlyListeners) ?></p>
-                    <p><strong>Top Track:</strong><br><?= htmlspecialchars($spotifyTopTrack) ?></p>
-
-                    <h3>YouTube</h3>
-                    <p><strong>Subscribers:</strong><br><?= htmlspecialchars($youtubeSubscribers) ?></p>
-                    <p><strong>Total Views:</strong><br><?= htmlspecialchars($youtubeViews) ?></p>
-
-                    <p style="font-size:13px; color:gray;">(Placeholder for future API integration)</p>
-                </div>
-            </article>
-
-            <!-- MANAGE PROFILE -->
             <article class="profile-card profile-card-wide">
-                <h2>Manage Profile</h2>
-                <form action="#" method="post">
-                    <p>
-                        <label>Full Name</label>
-                        <input type="text" name="artist_name" value="<?= htmlspecialchars($artistName) ?>">
-                    </p>
-                    <p>
-                        <label>Stage Name</label>
-                        <input type="text" name="stage_name" value="<?= htmlspecialchars($stageName) ?>">
-                    </p>
-                    <p>
-                        <label>Email</label>
-                        <input type="email" name="email" value="<?= htmlspecialchars($email) ?>">
-                    </p>
-                    <p>
-                        <label>Genre</label>
-                        <input type="text" name="genre" value="<?= htmlspecialchars($genre) ?>">
-                    </p>
-                    <p>
-                        <label>Band Name</label>
-                        <input type="text" name="band_name" value="<?= htmlspecialchars($bandName) ?>">
-                    </p>
-                    <p>
-                        <label>Location</label>
-                        <input type="text" name="location" value="<?= htmlspecialchars($location) ?>">
-                    </p>
-                    <p>
-                        <label>Artist Bio</label>
-                        <textarea name="bio" rows="5"><?= htmlspecialchars($bio) ?></textarea>
-                    </p>
-                    <p style="text-align:center;">
-                        <button type="submit" class="primary-btn">Update Profile</button>
-                    </p>
-                </form>
-            </article>
+                <h2 class="profile-page-title">
+                    <?= htmlspecialchars(trim($stageName) !== '' ? $stageName : 'Your Profile') ?>
+                </h2>
 
+                <div class="profile-header-card">
+
+                    <div class="profile-image-section">
+                        <form class="profile-upload-form" action="profileImageUpload.php" method="post" enctype="multipart/form-data">
+                            <div class="profile-avatar-wrap profile-avatar-interactive" onclick="triggerPhotoPicker()">
+                                <?php if ($hasProfileImage): ?>
+                                    <img
+                                        src="<?= htmlspecialchars($profileImage) ?>"
+                                        alt="Profile Picture"
+                                        id="profileImagePreview"
+                                    >
+                                    <div class="profile-photo-overlay">
+                                        <span>Change Photo</span>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="profile-avatar-placeholder" id="profileAvatarPlaceholder">🎵</div>
+                                    <img
+                                        src=""
+                                        alt="Profile Picture Preview"
+                                        id="profileImagePreview"
+                                        style="display:none;"
+                                    >
+                                    <div class="profile-photo-overlay">
+                                        <span>Add Photo</span>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+
+                            <input
+                                type="file"
+                                id="profile_image_file"
+                                name="profile_image_file"
+                                accept=".jpg,.jpeg,.png,.webp,.gif"
+                                style="display:none;"
+                                onchange="handleFileSelect(this)"
+                            >
+
+                            <div id="photoActionArea" class="photo-action-area">
+                                <button
+                                    type="button"
+                                    class="primary-btn-inline photo-action-btn"
+                                    onclick="triggerPhotoPicker()"
+                                    id="uploadBtn"
+                                >
+                                    <?= $hasProfileImage ? 'Change Photo' : 'Add Photo' ?>
+                                </button>
+
+                                <button
+                                    type="submit"
+                                    class="secondary-btn-inline photo-action-btn"
+                                    id="savePhotoBtn"
+                                >
+                                    Save Photo
+                                </button>
+                            </div>
+
+                            <div id="fileNamePreview" class="photo-file-name"></div>
+                        </form>
+                    </div>
+
+                    <div class="profile-main-details">
+                        <div class="profile-inline-list">
+
+                            <?php
+                            $fields = [
+                                'stage_name' => ['label' => 'Stage Name', 'value' => $stageName, 'placeholder' => 'Enter stage name', 'type' => 'text'],
+                                'instrument' => ['label' => 'Instrument', 'value' => $instrument, 'placeholder' => 'Enter instrument', 'type' => 'text'],
+                                'band_name'  => ['label' => 'Band', 'value' => $bandName, 'placeholder' => 'Enter band name', 'type' => 'text'],
+                                'genre'      => ['label' => 'Genre', 'value' => $genre, 'placeholder' => 'Enter genre', 'type' => 'text'],
+                                'location'   => ['label' => 'Location', 'value' => $location, 'placeholder' => 'Enter location', 'type' => 'text'],
+                            ];
+
+                            foreach ($fields as $fieldName => $fieldData):
+                                $isEmpty = trim($fieldData['value']) === '';
+                            ?>
+                                <div class="profile-inline-row" onclick="toggleEdit('<?= htmlspecialchars($fieldName) ?>')">
+                                    <div class="profile-inline-left">
+                                        <span class="profile-inline-label"><?= htmlspecialchars($fieldData['label']) ?></span>
+
+                                        <div class="profile-inline-value <?= $isEmpty ? 'profile-placeholder' : '' ?>">
+                                            <?= htmlspecialchars(displayValue($fieldData['value'], $fieldData['placeholder'])) ?>
+                                        </div>
+
+                                        <form class="profile-edit-form"
+                                              id="form-<?= htmlspecialchars($fieldName) ?>"
+                                              action="profileFieldUpdate.php"
+                                              method="post"
+                                              onclick="event.stopPropagation();">
+                                            <input type="hidden" name="field_name" value="<?= htmlspecialchars($fieldName) ?>">
+                                            <input
+                                                type="<?= htmlspecialchars($fieldData['type']) ?>"
+                                                name="field_value"
+                                                value="<?= htmlspecialchars($fieldData['value']) ?>"
+                                                placeholder="<?= htmlspecialchars($fieldData['placeholder']) ?>"
+                                            >
+                                            <div class="edit-form-actions">
+                                                <button type="submit" class="primary-btn-inline">Save</button>
+                                                <button type="button" class="secondary-btn-inline" onclick="cancelEdit('<?= htmlspecialchars($fieldName) ?>')">Cancel</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+
+                            <div class="profile-inline-row" onclick="toggleEdit('bio')">
+                                <div class="profile-inline-left">
+                                    <span class="profile-inline-label">Bio</span>
+
+                                    <div class="profile-inline-value <?= trim($bio) === '' ? 'profile-placeholder' : '' ?>">
+                                        <?= nl2br(htmlspecialchars(displayValue($bio, "Enter bio"))) ?>
+                                    </div>
+
+                                    <form class="profile-edit-form"
+                                          id="form-bio"
+                                          action="profileFieldUpdate.php"
+                                          method="post"
+                                          onclick="event.stopPropagation();">
+                                        <input type="hidden" name="field_name" value="bio">
+                                        <textarea name="field_value" rows="5" placeholder="Enter bio"><?= htmlspecialchars($bio) ?></textarea>
+                                        <div class="edit-form-actions">
+                                            <button type="submit" class="primary-btn-inline">Save</button>
+                                            <button type="button" class="secondary-btn-inline" onclick="cancelEdit('bio')">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </article>
         </section>
     </section>
 </main>
 
+<?php include 'includes/_footer.php'; ?>
 
 <script src="assets/js/main.js"></script>
+
+<script>
+    function closeAllEditForms() {
+        const forms = document.querySelectorAll('.profile-edit-form');
+        forms.forEach(form => form.classList.remove('active'));
+    }
+
+    function toggleEdit(fieldName) {
+        const form = document.getElementById('form-' + fieldName);
+        if (!form) return;
+
+        const isActive = form.classList.contains('active');
+        closeAllEditForms();
+
+        if (!isActive) {
+            form.classList.add('active');
+            const input = form.querySelector('input[type="text"], textarea');
+            if (input) {
+                input.focus();
+                if (input.select && input.tagName !== 'TEXTAREA') {
+                    input.select();
+                }
+            }
+        }
+    }
+
+    function cancelEdit(fieldName) {
+        const form = document.getElementById('form-' + fieldName);
+        if (form) {
+            form.classList.remove('active');
+        }
+    }
+
+    function closeToast(toastId) {
+        const toast = document.getElementById(toastId);
+        if (!toast) return;
+
+        toast.classList.add('profile-toast-hide');
+
+        setTimeout(() => {
+            const container = toast.closest('.profile-toast-container');
+            if (container) {
+                container.remove();
+            } else {
+                toast.remove();
+            }
+        }, 450);
+    }
+
+    function triggerPhotoPicker() {
+        const input = document.getElementById('profile_image_file');
+        if (input) {
+            input.click();
+        }
+    }
+
+    function handleFileSelect(input) {
+        const file = input.files[0];
+        const preview = document.getElementById('fileNamePreview');
+        const actionArea = document.getElementById('photoActionArea');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const imagePreview = document.getElementById('profileImagePreview');
+        const placeholder = document.getElementById('profileAvatarPlaceholder');
+
+        if (file) {
+            preview.textContent = file.name;
+            actionArea.classList.add('active');
+            uploadBtn.textContent = "Choose Different Photo";
+
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    if (imagePreview) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    }
+
+                    if (placeholder) {
+                        placeholder.style.display = 'none';
+                    }
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+    }
+
+    setTimeout(() => {
+        closeToast('success-toast');
+        closeToast('error-toast');
+    }, 3000);
+</script>
+
 </body>
 </html>
-    
