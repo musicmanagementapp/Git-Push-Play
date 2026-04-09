@@ -71,13 +71,16 @@ function create_musician(string $userId, array $fields): array
 
     $musicians = read_musicians();
     $musicians[] = [
-        'id'        => gen_id(),
-        'userId'    => $userId,
-        'stageName' => trim($fields['stageName'] ?? ''),
-        'firstName' => trim($fields['firstName'] ?? ''),
-        'lastName'  => trim($fields['lastName'] ?? ''),
-        'city'      => trim($fields['city'] ?? ''),
-        'createdAt' => date('c'),
+        'id'           => gen_id(),
+        'userId'       => $userId,
+        'stageName'    => trim($fields['stageName'] ?? ''),
+        'firstName'    => trim($fields['firstName'] ?? ''),
+        'lastName'     => trim($fields['lastName'] ?? ''),
+        'city'         => trim($fields['city'] ?? ''),
+        'instrument'   => trim($fields['instrument'] ?? ''),
+        'bio'          => trim($fields['bio'] ?? ''),
+        'profileImage' => trim($fields['profileImage'] ?? ''),
+        'createdAt'    => date('c'),
     ];
 
     if (!write_json(musicians_path(), $musicians)) {
@@ -90,7 +93,7 @@ function create_musician(string $userId, array $fields): array
 function update_musician(string $id, array $fields): array
 {
     $musicians = read_musicians();
-    $allowed   = ['stageName', 'firstName', 'lastName', 'city'];
+    $allowed   = ['stageName', 'firstName', 'lastName', 'city', 'instrument', 'bio', 'profileImage'];
     $found     = false;
 
     foreach ($musicians as &$m) {

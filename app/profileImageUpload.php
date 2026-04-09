@@ -1,9 +1,39 @@
 <?php
 session_start();
 
+require_once __DIR__ . '/includes/_pullinfo.php';
+require_once __DIR__ . '/assets/libs/data.php';
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: artist-profile.php');
     exit;
+}
+
+if (!$gpUser || empty($gpUser['id'])) {
+    $_SESSION['profile_error'] = "User not found.";
+    header('Location: artist-profile.php');
+    exit;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Auto-create musician profile if missing
+|--------------------------------------------------------------------------
+*/
+if (!$gpMusician || empty($gpMusician['id'])) {
+    $createResult = create_musician($gpUser['id'], []);
+    if (!$createResult['success']) {
+        $_SESSION['profile_error'] = $createResult['message'] ?? 'Could not create musician profile.';
+        header('Location: artist-profile.php');
+        exit;
+    }
+
+    $gpMusician = find_musician_by_user_id($gpUser['id']);
+    if (!$gpMusician || empty($gpMusician['id'])) {
+        $_SESSION['profile_error'] = "Musician profile could not be loaded.";
+        header('Location: artist-profile.php');
+        exit;
+    }
 }
 
 if (!isset($_FILES['profile_image_file']) || $_FILES['profile_image_file']['error'] === UPLOAD_ERR_NO_FILE) {
@@ -61,11 +91,15 @@ if (!move_uploaded_file($file['tmp_name'], $destination)) {
     exit;
 }
 
-/*
-Session save for now
-can replace this with JSON save logic.
-*/
-$_SESSION['profile_image'] = $webPath;
+$result = update_musician($gpMusician['id'], [
+    'profileImage' => $webPath
+]);
+
+if (!$result['success']) {
+    $_SESSION['profile_error'] = $result['message'] ?? "Could not save profile image.";
+    header('Location: artist-profile.php');
+    exit;
+}
 
 $_SESSION['profile_success'] = "Profile picture uploaded successfully.";
 header('Location: artist-profile.php');
