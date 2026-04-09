@@ -1,27 +1,59 @@
-<!-- includes/_login.php later when you can actually login-->
-<?php include 'assets/libs/phpfunctions.php'; ?>
-
-
+<?php include 'includes/_login.php'; ?>
+</head>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>GitPushPlay</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Clicker+Script&family=Imperial+Script&family=Rouge+Script&display=swap" rel="stylesheet">
     <?php include 'includes/_meta.php'; ?>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
 
-    <?php include 'includes/_header.php'; ?>
+<section class="hero">
 
-    <main class="home-page">
-        <section class="hero">
-            <h1>Welcome to GitPushPlay</h1>
-            <p>(its working how it should).</p>
-        </section>
-    </main>
+    <img src="assets/images/Headphonegirl.png" class="silhouette">
+    <img src="assets/images/Purpleblueexplo.png" class="star">
 
-    <?php include 'includes/_footer.php'; ?>
+    <div class="title-box">
+        <h1>GitPushPlay</h1>
+    </div>
 
-    <script src="assets/js/main.js"></script>
+    <p class="tagline">Manage your art, your way.</p>
+</section>
+
+<!-- NAVIGATION -->
+<section class="navigation-bar">
+    <nav>
+        <ul class="nav-list">
+            <li><a href="index.php">Home</a></li>
+            <li><a href="demos.php">Demos</a></li>
+            <li><a href="bandpage.php">Band Page</a></li>
+            <li><a href="schedule.php">Calendar</a></li>
+            <li><a href="artist-profile.php">Artist Profile</a></li>
+        </ul>
+    </nav>
+</section>
+
+<!-- VINYL -->
+<section class="vinyl-section">
+    <div class="text-left" style="border-radius: 15px">Artist management</div>
+
+    <img src="assets/images/vinyl.png" class="vinyl">
+
+    <div class="text-right" style="border-radius: 15px">Made easy.</div>
+</section>
+
+
+<!-- <section class="actions">
+    <button class="btn"><a href="login.php">Login</a></button>
+    <button class="btn"><a href="create-account.php">Create Account</a></button>
+</section> -->
+
 </body>
 </html>

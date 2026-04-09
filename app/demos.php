@@ -8,286 +8,150 @@ $description = "Upload, listen, and share your song drafts with your band.";
 <head>
     <?php include 'includes/_meta.php'; ?>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .page { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
+        .page { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; font-family: "Belleza", sans-serif; }
 
-        .page-header {
-            display: flex; align-items: flex-end; justify-content: space-between;
-            margin-bottom: 32px; gap: 16px; flex-wrap: wrap;
-        }
-
-        .page-title {
-            font-size: 32px; font-weight: 700; color: var(--text-primary); line-height: 1;
-        }
-
-        .page-title span {
-            font-size: 13px; font-weight: 400; color: var(--text-muted);
-            display: block; margin-top: 6px; letter-spacing: 0.04em;
-        }
+        .page-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 32px; gap: 16px; flex-wrap: wrap; }
+        .page-title { font-size: 32px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+        .page-title span { font-size: 13px; color: var(--text-muted); display: block; margin-top: 6px; letter-spacing: 0.04em; }
 
         .tabs { display: flex; border-bottom: 1px solid var(--border-subtle); margin-bottom: 28px; }
-
-        .tab {
-            padding: 10px 18px; font-size: 12px; letter-spacing: 0.06em;
-            color: var(--text-muted); cursor: pointer;
-            border-bottom: 2px solid transparent; margin-bottom: -1px;
-            transition: color 0.15s, border-color 0.15s; user-select: none;
-        }
-
+        .tab { padding: 10px 18px; font-size: 12px; letter-spacing: 0.06em; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.15s, border-color 0.15s; user-select: none; }
         .tab:hover { color: var(--text-primary); }
         .tab.active { color: var(--accent-primary); border-bottom-color: var(--accent-primary); }
 
-        .upload-zone {
-            position: relative; border: 1.5px dashed var(--border-strong);
-            border-radius: 10px; padding: 36px 24px; text-align: center;
-            cursor: pointer; background: var(--bg-secondary);
-            transition: border-color 0.2s, background 0.2s; margin-bottom: 28px;
-        }
-
+        .upload-zone { position: relative; border: 1.5px dashed var(--border-strong); border-radius: 10px; padding: 36px 24px; text-align: center; cursor: pointer; background: var(--bg-secondary); transition: border-color 0.2s, background 0.2s; margin-bottom: 28px; font-family: "Caveat", cursive; font-size: 30px; }
         .upload-zone:hover, .upload-zone.drag-over { border-color: var(--accent-primary); background: var(--bg-elevated); }
+        .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
 
-        .upload-zone input[type="file"] {
-            position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
-        }
-
-        .upload-icon-wrap {
-            width: 48px; height: 48px; border-radius: 50%;
-            background: var(--bg-elevated); border: 1px solid var(--border-strong);
-            margin: 0 auto 14px;
-            display: flex; align-items: center; justify-content: center;
-        }
-
+        .upload-icon-wrap { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-elevated); border: 1px solid var(--border-strong); margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; }
         .upload-icon-wrap svg { width: 22px; height: 22px; stroke: var(--accent-primary); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
         .upload-text { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
         .upload-text strong { color: var(--accent-primary); font-weight: 500; }
 
         .upload-formats { display: flex; gap: 6px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
-
-        .format-pill {
-            font-size: 10px; padding: 2px 8px; border-radius: 20px;
-            background: var(--bg-elevated); border: 0.5px solid var(--border-strong);
-            color: var(--text-muted); letter-spacing: 0.06em;
-        }
+        .format-pill { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: var(--bg-elevated); border: 0.5px solid var(--border-strong); color: var(--text-muted); letter-spacing: 0.06em; }
 
         .toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
-
         .search-wrap { position: relative; flex: 1; min-width: 200px; }
-
-        .search-wrap svg {
-            position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-            width: 14px; height: 14px; stroke: var(--text-muted); fill: none;
-            stroke-width: 1.5; stroke-linecap: round;
-        }
-
-        .search-input {
-            width: 100%; background: var(--bg-secondary); border: 0.5px solid var(--border-subtle);
-            border-radius: 6px; padding: 8px 12px 8px 32px;
-            font-family: inherit; font-size: 12px;
-            color: var(--text-primary); outline: none; transition: border-color 0.15s;
-        }
-
+        .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; stroke: var(--text-muted); fill: none; stroke-width: 1.5; }
+        .search-input { width: 100%; background: var(--bg-secondary); border: 0.5px solid var(--border-subtle); border-radius: 6px; padding: 8px 12px 8px 32px; font-family: inherit; font-size: 12px; color: var(--text-primary); outline: none; transition: border-color 0.15s; }
         .search-input::placeholder { color: var(--text-muted); }
         .search-input:focus { border-color: var(--accent-primary); }
 
-        .filter-btn {
-            padding: 7px 14px; font-family: inherit;
-            font-size: 11px; letter-spacing: 0.05em;
-            background: var(--bg-secondary); border: 0.5px solid var(--border-subtle);
-            border-radius: 6px; color: var(--text-muted); cursor: pointer; transition: all 0.15s;
-        }
-
+        .filter-btn { padding: 7px 14px; font-size: 11px; background: var(--bg-secondary); border: 0.5px solid var(--border-subtle); border-radius: 6px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
         .filter-btn:hover, .filter-btn.active { border-color: var(--accent-primary); color: var(--accent-primary); }
 
         .count-badge { font-size: 11px; color: var(--text-muted); margin-left: auto; white-space: nowrap; }
 
-        .demo-list { display: flex; flex-direction: column; gap: 12px; }
+        .demo-list { display: flex; flex-direction: column; gap: 12px; font-family: "Caveat", cursive; font-size: 20px; }
 
-        .demo-card {
-            background: var(--bg-secondary); border: 0.5px solid var(--border-subtle);
-            border-radius: 10px; padding: 18px 20px;
-            transition: border-color 0.15s;
-            animation: fadeIn 0.25s ease;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
+        .demo-card { background: var(--bg-secondary); border: 0.5px solid var(--border-subtle); border-radius: 10px; padding: 18px 20px; transition: border-color 0.15s; }
         .demo-card:hover { border-color: var(--border-strong); }
         .demo-card.is-playing { border-color: var(--accent-primary); background: var(--bg-elevated); }
 
         .card-top { display: flex; align-items: center; gap: 14px; }
-
-        .play-btn {
-            flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
-            background: var(--bg-elevated); border: 1px solid var(--border-strong);
-            color: var(--accent-primary); cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: background 0.15s, color 0.15s, transform 0.1s;
-        }
-
+        .play-btn { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-elevated); border: 1px solid var(--border-strong); color: var(--accent-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, color 0.15s, transform 0.1s; }
         .play-btn:hover { background: var(--accent-primary); color: var(--bg-main); }
         .play-btn:active { transform: scale(0.93); }
-        .is-playing .play-btn { background: var(--accent-primary); color: var(--bg-main); }
         .play-btn svg { width: 16px; height: 16px; fill: currentColor; }
 
         .card-meta { flex: 1; min-width: 0; }
-
         .card-title { font-size: 14px; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
         .card-sub { font-size: 11px; color: var(--text-secondary); margin-top: 3px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         .card-sub .dot { color: var(--text-muted); }
-
         .tag { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 20px; background: var(--bg-elevated); border: 0.5px solid var(--border-strong); color: var(--text-muted); letter-spacing: 0.04em; }
 
         .card-actions { display: flex; gap: 6px; flex-shrink: 0; }
 
-        .icon-btn {
-            width: 32px; height: 32px; border-radius: 6px;
-            background: transparent; border: 0.5px solid var(--border-subtle);
-            color: var(--text-muted); cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.15s; position: relative;
-        }
-
+        .icon-btn { width: 32px; height: 32px; border-radius: 6px; background: transparent; border: 0.5px solid var(--border-subtle); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
         .icon-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
         .icon-btn:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
         .icon-btn.danger:hover { border-color: #7f2020; color: #e06060; }
 
-        .waveform { display: flex; align-items: center; gap: 2px; height: 40px; margin: 14px 0 8px; cursor: pointer; padding: 4px 0; }
-
-        .wf-bar { flex: 1; border-radius: 2px; background: var(--border-strong); transition: background 0.08s; min-width: 0; }
-        .wf-bar.wf-played { background: var(--accent-secondary); }
-        .wf-bar.wf-head   { background: var(--accent-primary); }
+        /* Smaller waveform */
+        .waveform { display: flex; align-items: center; gap: 1px; height: 16px; margin: 12px 0 8px; cursor: pointer; padding: 2px 0; }
+        .wf-bar { flex: 1; border-radius: 2px; background: #d6cde6; }
+        .wf-bar.wf-played { background: #7d4fff; }
+        .wf-bar.wf-head   { background: #ff914d; }
 
         .progress-row { display: flex; align-items: center; gap: 10px; }
-
         .time { font-size: 10px; color: var(--text-muted); min-width: 34px; }
         .time.right { text-align: right; }
-
         .progress-track { flex: 1; height: 3px; background: var(--border-subtle); border-radius: 2px; cursor: pointer; }
         .progress-fill { height: 100%; background: var(--accent-primary); border-radius: 2px; width: 0%; pointer-events: none; }
 
         .vol-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
         .vol-row svg { width: 13px; height: 13px; stroke: var(--text-muted); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
-
-        input[type="range"].vol {
-            flex: 1; max-width: 100px; -webkit-appearance: none;
-            height: 3px; border-radius: 2px; background: var(--border-strong); outline: none; cursor: pointer;
-        }
-
+        input[type="range"].vol { flex: 1; max-width: 100px; -webkit-appearance: none; height: 3px; border-radius: 2px; background: var(--border-strong); outline: none; cursor: pointer; }
         input[type="range"].vol::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: var(--accent-primary); cursor: pointer; }
         input[type="range"].vol::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: var(--accent-primary); border: none; cursor: pointer; }
-
         .vol-val { font-size: 10px; color: var(--text-muted); min-width: 28px; }
-
-        .share-pop {
-            position: absolute; right: 0; top: 38px;
-            background: var(--bg-elevated); border: 1px solid var(--border-strong);
-            border-radius: 8px; padding: 14px; width: 260px;
-            z-index: 50; display: none;
-            box-shadow: 0 12px 32px rgba(0,0,0,0.6);
-        }
-
-        .share-pop.open { display: block; }
-        .share-pop-label { font-size: 11px; color: var(--text-muted); margin-bottom: 7px; }
-        .share-link-row { display: flex; gap: 6px; }
-
-        .share-link-input {
-            flex: 1; background: var(--bg-main); border: 0.5px solid var(--border-strong);
-            border-radius: 4px; font-family: inherit;
-            font-size: 10px; color: var(--text-primary); padding: 5px 8px; outline: none;
-        }
-
-        .copy-btn {
-            padding: 5px 10px; font-family: inherit; font-size: 10px;
-            background: var(--bg-secondary); border: 0.5px solid var(--border-strong);
-            border-radius: 4px; color: var(--accent-primary); cursor: pointer; transition: background 0.15s; white-space: nowrap;
-        }
-
-        .copy-btn:hover { background: var(--bg-elevated); }
-        .copied-msg { font-size: 10px; color: var(--accent-highlight); margin-top: 5px; display: none; }
 
         .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); line-height: 2; }
         .empty-state strong { color: var(--text-secondary); display: block; font-size: 15px; margin-bottom: 6px; }
-
-        #toast {
-            position: fixed; bottom: 32px; left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: var(--bg-elevated); border: 1px solid var(--border-strong);
-            border-radius: 6px; padding: 10px 20px; font-size: 12px; color: var(--text-primary);
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.2s, transform 0.2s; z-index: 999;
-        }
-
+        #toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 6px; padding: 10px 20px; font-size: 12px; color: var(--text-primary); opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 999; }
         #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-highlight); display: inline-block; animation: blink 2s ease-in-out infinite; }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-
-        @media (max-width: 600px) {
-            .page { padding: 24px 16px 60px; }
-            .page-title { font-size: 24px; }
-        }
     </style>
 </head>
 <body>
 
-    <?php include 'includes/_header.php'; ?>
+<?php include 'includes/_header.php'; ?>
 
-    <main class="page">
-        <div class="page-header">
-            <div class="page-title">
-                Demo Vault
-                <span>// upload, listen, share your song drafts</span>
-            </div>
+<main class="page">
+    <div class="page-header">
+        <div class="page-title">
+            Demo Vault
+            <span>upload, listen, share your song drafts</span>
         </div>
+    </div>
 
-        <div class="tabs">
-            <div class="tab active" data-tab="all">all demos</div>
-            <div class="tab" data-tab="mine">my uploads</div>
-            <div class="tab" data-tab="shared">shared with me</div>
+    <div class="tabs">
+        <div class="tab active" data-tab="all">all demos</div>
+        <div class="tab" data-tab="mine">my uploads</div>
+        <div class="tab" data-tab="shared">shared with me</div>
+    </div>
+
+    <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept="audio/*" multiple />
+        <div class="upload-icon-wrap">
+            <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
         </div>
-
-        <div class="upload-zone" id="uploadZone">
-            <input type="file" id="fileInput" accept="audio/*" multiple />
-            <div class="upload-icon-wrap">
-                <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
-            </div>
-            <div class="upload-text"><strong>drop audio files here</strong> or click to browse</div>
-            <div class="upload-formats">
-                <span class="format-pill">MP3</span>
-                <span class="format-pill">WAV</span>
-                <span class="format-pill">FLAC</span>
-                <span class="format-pill">M4A</span>
-                <span class="format-pill">OGG</span>
-                <span class="format-pill">AAC</span>
-            </div>
+        <div class="upload-text"><strong>drop audio files here</strong> or click to browse</div>
+        <div class="upload-formats">
+            <span class="format-pill">MP3</span>
+            <span class="format-pill">WAV</span>
+            <span class="format-pill">FLAC</span>
+            <span class="format-pill">M4A</span>
+            <span class="format-pill">OGG</span>
+            <span class="format-pill">AAC</span>
         </div>
+    </div>
 
-        <div class="toolbar">
-            <div class="search-wrap">
-                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input class="search-input" type="text" id="searchInput" placeholder="search demos..." />
-            </div>
-            <button class="filter-btn active" data-sort="newest">newest</button>
-            <button class="filter-btn" data-sort="oldest">oldest</button>
-            <button class="filter-btn" data-sort="alpha">a–z</button>
-            <span class="count-badge" id="countBadge">0 tracks</span>
+    <div class="toolbar">
+        <div class="search-wrap">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-input" type="text" id="searchInput" placeholder="search demos..." />
         </div>
+        <button class="filter-btn active" data-sort="newest">newest</button>
+        <button class="filter-btn" data-sort="oldest">oldest</button>
+        <button class="filter-btn" data-sort="alpha">a–z</button>
+        <span class="count-badge" id="countBadge">0 tracks</span>
+    </div>
 
-        <div class="demo-list" id="demoList">
-            <div class="empty-state"><strong>no demos yet</strong>upload your first track above</div>
-        </div>
-    </main>
+    <div class="demo-list" id="demoList">
+        <div class="empty-state"><strong>no demos yet</strong>upload your first track above</div>
+    </div>
+</main>
+<div id="toast"></div>
 
-    <?php include 'includes/_footer.php'; ?>
 
-    <div id="toast"></div>
-
-    <script>
+<script>
         let demos = [], nextId = 1, currentId = null, currentAudio = null, progressRaf = null;
         let activeTab = 'all', activeSort = 'newest', searchQuery = '';
 
@@ -397,13 +261,7 @@ $description = "Upload, listen, and share your song drafts with your band.";
             showToast('demo removed'); render();
         }
 
-        function toggleShare(id) {
-            const pop = document.getElementById('share-' + id);
-            if (!pop) return;
-            const isOpen = pop.classList.contains('open');
-            document.querySelectorAll('.share-pop.open').forEach(p => p.classList.remove('open'));
-            if (!isOpen) pop.classList.add('open');
-        }
+     
 
         function copyShare(id) {
             const inp = document.getElementById('share-input-' + id);

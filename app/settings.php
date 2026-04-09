@@ -4,8 +4,6 @@ include 'includes/_pullinfo.php';
 
 $title       = 'Settings | GitPushPlay';
 $description = 'Manage your account and musician profile settings.';
-
-// Map _pullinfo.php variables to the names on this page
 $userId      = $gpUserId;
 $user        = $gpUser;
 $musician    = $gpMusician;
