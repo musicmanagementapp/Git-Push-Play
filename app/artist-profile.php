@@ -1,16 +1,17 @@
 <?php
-session_start();
+include 'includes/_login.php';
+include 'includes/_pullinfo.php';
 
-$stageName    = $_SESSION['stage_name'] ?? '';
-$title        = trim($stageName) !== '' ? $stageName . ' | Profile' : 'Artist Profile';
-$description  = "Artist profile management dashboard for GitPushPlay";
+$stageName = $gpMusician['stageName'] ?? '';
+$title = trim($stageName) !== '' ? $stageName . ' | Profile' : 'Artist Profile';
+$description = "Artist profile management dashboard for GitPushPlay";
 
-$instrument   = $_SESSION['instrument'] ?? '';
-$genre        = $_SESSION['genre'] ?? '';
-$bandName     = $_SESSION['band_name'] ?? '';
-$location     = $_SESSION['location'] ?? '';
-$bio          = $_SESSION['bio'] ?? '';
-$profileImage = $_SESSION['profile_image'] ?? '';
+$instrument   = $gpMusician['instrument'] ?? '';
+$genre        = $gpBand['genre'] ?? '';
+$bandName     = $gpBand['name'] ?? '';
+$location     = $gpMusician['city'] ?? '';
+$bio          = $gpMusician['bio'] ?? '';
+$profileImage = $gpMusician['profileImage'] ?? '';
 
 $successMessage = $_SESSION['profile_success'] ?? '';
 $errorMessage   = $_SESSION['profile_error'] ?? '';
@@ -22,6 +23,7 @@ function displayValue($value, $placeholder) {
 }
 
 $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profileImage);
+?>
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -468,8 +470,8 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                             $fields = [
                                 'stage_name' => ['label' => 'Stage Name', 'value' => $stageName, 'placeholder' => 'Enter stage name', 'type' => 'text'],
                                 'instrument' => ['label' => 'Instrument', 'value' => $instrument, 'placeholder' => 'Enter instrument', 'type' => 'text'],
-                                'band_name'  => ['label' => 'Band', 'value' => $bandName, 'placeholder' => 'Enter band name', 'type' => 'text'],
-                                'genre'      => ['label' => 'Genre', 'value' => $genre, 'placeholder' => 'Enter genre', 'type' => 'text'],
+                                'band_name'  => ['label' => 'Band', 'value' => $bandName, 'placeholder' => 'Join or create a band first', 'type' => 'text'],
+                                'genre'      => ['label' => 'Genre', 'value' => $genre, 'placeholder' => 'Join or create a band first', 'type' => 'text'],
                                 'location'   => ['label' => 'Location', 'value' => $location, 'placeholder' => 'Enter location', 'type' => 'text'],
                             ];
 
