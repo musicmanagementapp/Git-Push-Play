@@ -71,7 +71,7 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                             <div class="profile-header-card">
 
                                 <div class="profile-image-section">
-                                    <form class="profile-upload-form" action="/assets/libs/profileImageUpload.php" method="post" enctype="multipart/form-data">
+                                    <form class="profile-upload-form" action="assets/libs/profileImageUpload.php" method="post" enctype="multipart/form-data">
                                         <div class="profile-avatar-wrap profile-avatar-interactive" onclick="triggerPhotoPicker()">
                                             <?php if ($hasProfileImage): ?>
                                                 <img

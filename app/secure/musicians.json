@@ -6,7 +6,8 @@
         "firstName": "Justus",
         "lastName": "Hibbler",
         "city": "Ann Arbor",
-        "createdAt": "2026-03-26T15:45:30+00:00"
+        "createdAt": "2026-03-26T15:45:30+00:00",
+        "profileImage": "assets\/libs\/assets\/images\/profile\/Piggy_Burrret_-_Copy_1776198843.jpg"
     },
     {
         "id": "3aae32debace95f2",
