@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main class="auth-shell">
     <section class="auth-card delete-confirm-card">
         <h1>Delete Account</h1>
-        <p style="color:var(--text-secondary);margin-bottom:8px;">
+        <p style="color:var(--text-secondary);margin-bottom:8px;font-size:14px;">
             This will permanently delete your account, musician profile, and band memberships.
             <strong style="color:#ffb4b4;">This cannot be undone.</strong>
         </p>
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <form method="post" action="delete_account.php">
             <div class="auth-group">
-                <label for="confirm_delete">Type <strong>delete</strong> to confirm</label>
+                <label for="confirm_delete" style="font-size:20px;">Type <strong>delete</strong> to confirm</label>
                 <input
                     type="text"
                     id="confirm_delete"
@@ -70,16 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     autocomplete="off"
                     placeholder="delete"
                     required
+                    style="margin-top: 8px; margin-bottom: 16px;"
                 >
             </div>
 
-            <button class="auth-btn delete-confirm-btn" type="submit">
+            <button class="auth-btn delete-confirm-btn" type="submit" >
                 Permanently Delete My Account
             </button>
         </form>
 
-        <div class="auth-link">
-            <a href="settings.php">Cancel — go back to Settings</a>
+        <div class="auth-link" >
+            <a href="artist-profile.php" style="text-decoration:none; color:var(--text-secondary);margin-bottom:8px;font-size:14px;">Cancel — go back to Settings</a>
         </div>
     </section>
 </main>

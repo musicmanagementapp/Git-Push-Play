@@ -15,6 +15,8 @@
         "firstName": "Admin",
         "lastName": "Profile",
         "city": "Antarctica",
-        "createdAt": "2026-03-26T15:53:22+00:00"
+        "createdAt": "2026-03-26T15:53:22+00:00",
+        "profileImage": "assets\/images\/profile\/Screenshot_2023-09-16_204527_1776116314.png",
+        "instrument": "Piano | Guitar"
     }
 ]

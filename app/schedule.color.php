@@ -1,8 +1,21 @@
 <?php
 include 'includes/_login.php';
-// token validation
+include 'includes/_pullinfo.php';
+
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// Build the band member list for the checkboxes
+$calBandMembers = [];
+foreach ($gpBandMembers as $mem) {
+    $name = trim($mem['musician']['stageName'] ?? '');
+    if ($name === '') {
+        $name = trim(($mem['musician']['firstName'] ?? '') . ' ' . ($mem['musician']['lastName'] ?? ''));
+    }
+    if ($name !== '') {
+        $calBandMembers[] = $name;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -11,223 +24,67 @@ if (empty($_SESSION['csrf_token'])) {
 <meta charset="UTF-8">
 <title>Interactive Schedule</title>
 <meta name="csrf-token" content="<?= $_SESSION['csrf_token'] ?>">
-<style>
-/* --- Body & Fonts --- */
-body {
-    background: linear-gradient(90deg, #aa83f6,#ffb689);
-    margin: 0;
-    font-family: "Belleza", sans-serif;
-    color: black;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-/* --- Top Navbar --- */
-.top-nav {
-    width: 70%; 
-    max-width: 1000px;
-    margin: 0 auto;
-    background: black;
-    opacity: 0.8;
-    padding: 15px 0;
-    position: fixed;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-    border-radius: 12px;
-}
-
-.top-nav ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-}
-
-.top-nav ul li a {
-    color: #e0d0f0;
-    text-decoration: none;
-    font-size: 18px;
-    font-family: "Belleza", sans-serif;
-    transition: color 0.3s;
-}
-
-.top-nav ul li a:hover {
-    color: #fff;
-}
-
-/* --- Main Container --- */
-.main-container {
-    background: #f3e0f0;
-    border-radius: 20px;
-    padding: 30px;
-    max-width: 1200px;
-    margin: 120px auto 50px auto; 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    flex-grow: 1;
-}
-
-/* --- Layout --- */
-.layout-container { 
-    display: flex; 
-    gap: 30px; 
-    align-items: flex-start; 
-}
-.sidebar { width: 350px; flex-shrink: 0; }
-.calendar-gui { flex-grow: 1; font-family: "Rouge Script", cursive; }
-
-/* --- Buttons --- */
-button { cursor: pointer; font-family: "Rouge Script", cursive; }
-.cal-header button {
-    background: #8b55a4;
-    color: #fff;
-    border: none;
-    padding: 5px 12px; 
-    border-radius: 8px;
-    font-size: 14px;
-}
-.cal-header button:hover { background: #a66bbf; }
-
-/* --- Form --- */
-.form-group { margin-bottom: 15px; }
-.form-group input, .form-group textarea { width: 100%; padding: 8px; box-sizing: border-box; }
-button[type="submit"] { width: 100%; padding: 10px; }
-
-.checkbox-group { 
-    display: flex; 
-    flex-wrap: wrap; 
-    gap: 15px; 
-    font-family: "Rouge Script", cursive; 
-    font-size: 14px;
-}
-
-.checkbox-group label {
-    display: flex;
-    align-items: center; 
-    cursor: pointer;
-    font-family: "Rouge Script", cursive; 
-    font-size: 22px; 
-}
-
-.checkbox-group input[type="checkbox"] {
-    width: auto; 
-    margin: 0 8px 0 0; 
-}
-
-/* --- Event Cards --- */
-.event-card { 
-    border: 1px solid #ccc; 
-    padding: 15px; 
-    margin-bottom: 10px; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    border-radius: 12px; 
-    background: #fff; 
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-}
-
-/* --- Toast --- */
-#toast { 
-    visibility: hidden; 
-    padding: 15px; 
-    border-radius: 4px; 
-    color: #7a5e86; 
-    text-align: center; 
-    margin-bottom: 20px; 
-}
-#toast.show { visibility: visible; }
-.success { background-color: #4CAF50; color: white !important;}
-.error { background-color: #f44336; color: white !important;}
-
-/* --- Calendar --- */
-.cal-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-bottom: 20px;
-    background: #d6b8d9;
-    padding: 10px 15px;
-    border-radius: 15px;
-}
-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-th, td { border: 1px solid #ccc; padding: 5px; }
-th { background: #000; text-align: center; padding: 10px 0; color: #fff; }
-td { height: 100px; vertical-align: top; cursor: pointer; transition: background 0.2s; border-radius: 8px; }
-td:hover { background: #ad86bf; }
-.day-num { font-weight: bold; display: block; margin-bottom: 5px; }
-.cal-event { 
-    background: #8b55a4; 
-    font-size: 11px; 
-    padding: 2px 4px; 
-    border-radius: 3px; 
-    margin-bottom: 3px; 
-    overflow: hidden; 
-    white-space: nowrap; 
-    text-overflow: ellipsis;
-    color: #fff;
-}
-
-
-/* --- Modal Styles --- */
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
-.modal-content { background: #f3e0f0; padding: 25px; border-radius: 15px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; font-family: "Rouge Script", cursive; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #d6b8d9; padding-bottom: 10px; }
-.modal-close { background: #ff4444; color: white; border: none; border-radius: 6px; padding: 6px 12px; font-family: "Rouge Script", cursive; cursor: pointer; font-weight: bold; }
-.modal-event { background: white; margin-bottom: 10px; padding: 15px; border-radius: 8px; cursor: pointer; border: 1px solid #d6b8d9; transition: box-shadow 0.2s; }
-.modal-event:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-.modal-event-time { font-weight: bold; color: #8b55a4; margin-right: 10px; }
-.modal-event-details { display: none; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; font-size: 14px; line-height: 1.5; color: #444; }
-</style>
+<link rel="stylesheet" href="assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Belleza&family=Rouge+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/schedule.css">
 </head>
 <body>
 
 <?php
-if (basename($_SERVER['PHP_SELF']) != 'index.php') {
+include 'includes/_header.php';
 ?>
-<nav class="top-nav">
-    <ul>
-        <li><a href="index.php">Home</a></li>
-        <li><a href="bandpage.php">Band Page</a></li>
-        <li><a href="calendar.php">Calendar</a></li>
-        <li><a href="artist-profile.php">Artist Profile</a></li>
-    </ul>
-</nav>
-<?php } ?>
 
 <div class="main-container">
+
+    <?php if (!$gpBand): ?>
+        <p style="text-align:center; font-size:1.1rem; opacity:0.7; padding: 40px 0;">
+            You need to join or create a band before you can use the calendar.
+            <br><a href="settings.php" style="color:#aa83f6;">Go to Settings</a>
+        </p>
+    <?php else: ?>
+
     <div class="layout-container">
         <div class="sidebar">
             <div id="toast"></div>
-            <h2>Add Event</h2>
+            <h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 20px;"><?= htmlspecialchars($gpBand['name']) ?> — Add Event</h2>
             <form id="eventForm">
                 <input type="hidden" id="eventId" value="">
                 <div class="form-group"><input type="text" id="title" placeholder="Event Title" required></div>
                 <div class="form-group"><input type="date" id="date" required></div>
                 <div class="form-group"><input type="time" id="time" required></div>
-                <div class="form-group"><input type="text" id="createdBy" placeholder="Your Name" required></div>
-                
+
+                <div class="form-group">
+                    <label style="font-size: 14px; font-weight: bold; display:block; margin-bottom:6px;">Created By:</label>
+                    <select id="createdBy" required style="width:100%; padding:0.65rem 0.85rem; border-radius:10px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.06); color:lavender; font-family:'Comic Sans MS', 'Segoe UI', cursive, sans-serif; font-size:1rem; outline:none;">
+                        <?php foreach ($calBandMembers as $memberName): ?>
+                            <option value="<?= htmlspecialchars($memberName) ?>"
+                                <?= (($gpMusician['stageName'] ?? '') === $memberName || trim(($gpMusician['firstName'] ?? '') . ' ' . ($gpMusician['lastName'] ?? '')) === $memberName) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($memberName) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <textarea id="description" placeholder="Event Description (Optional)" rows="3"></textarea>
                 </div>
+
+                <?php if (!empty($calBandMembers)): ?>
                 <div class="form-group">
-                    <label style="font-family: Rouge Script, cursive; font-size: 14px; font-weight: bold;">Tag Band Members:</label>
+                    <label style="font-size: 14px; font-weight: bold; display:block; margin-bottom:6px;">Tag Band Members:</label>
                     <div class="checkbox-group">
-                        <label><input type="checkbox" name="band_members" value="Alex"> Alex</label>
-                        <label><input type="checkbox" name="band_members" value="Sam"> Sam</label>
-                        <label><input type="checkbox" name="band_members" value="Jordan"> Jordan</label>
-                        <label><input type="checkbox" name="band_members" value="Casey"> Casey</label>
+                        <?php foreach ($calBandMembers as $memberName): ?>
+                            <label>
+                                <input type="checkbox" name="band_members" value="<?= htmlspecialchars($memberName) ?>">
+                                <?= htmlspecialchars($memberName) ?>
+                            </label>
+                        <?php endforeach; ?>
                     </div>
                 </div>
+                <?php endif; ?>
+
                 <button type="submit">Save Event</button>
             </form>
-            <h2>Upcoming Events</h2>
-            <div id="eventList">Loading...</div>
         </div>
 
         <div class="calendar-gui">
@@ -244,19 +101,27 @@ if (basename($_SERVER['PHP_SELF']) != 'index.php') {
             </table>
         </div>
     </div>
+
+    <div class="events-row-section">
+        <h2 class="events-row-title">Upcoming Events</h2>
+        <div id="eventList">Loading...</div>
+    </div>
+
+    <?php endif; ?>
 </div>
 
 <div id="dayModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 id="modalDateTitle" style="margin:0; font-family: 'Rouge Script', cursive; font-size: 28px;"></h2>
+            <h2 id="modalDateTitle" style="margin:0; font-size: 28px;"></h2>
             <button class="modal-close" onclick="closeDayModal()">Close</button>
         </div>
-        <p style="font-size: 13px; color: #666; margin-top: 0; font-family: sans-serif;">Click an event to expand details.</p>
+        <p style="font-size: 13px; opacity:0.6; margin-top: 0;">Click an event to expand details.</p>
         <div id="modalEventsList"></div>
     </div>
 </div>
 
+<?php if ($gpBand): ?>
 <script>
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 let currentYear = new Date().getFullYear();
@@ -284,19 +149,17 @@ async function loadData(){
 
 function renderEventList(){
     const list = document.getElementById('eventList');
-    if(globalEvents.length===0){ list.innerHTML='<p>No upcoming events.</p>'; return; }
-    
+    if(globalEvents.length===0){ list.innerHTML='<p style="opacity:0.6;">No upcoming events.</p>'; return; }
+
     list.innerHTML = globalEvents.map(ev=>`
-        <div class="event-card">
+        <div class="event-card" >
             <div class="event-details" style="flex-grow:1; margin-right:15px;">
-                <strong style="font-family: Rouge Script, cursive; font-size: 20px;">${escapeHTML(ev.title)}</strong><br>
-                <small style="font-family: Rouge Script, cursive; color: #555; font-size: 16px;">${escapeHTML(ev.date)} @ ${escapeHTML(ev.time || '')} | By: ${escapeHTML(ev.created_by)}</small>
-                
-                ${ev.description ? `<p style="margin: 8px 0 5px 0; font-size: 13px; font-family: sans-serif;">${escapeHTML(ev.description)}</p>` : ''}
-                
-                ${ev.band_members && ev.band_members.length > 0 ? `<div style="margin-top: 5px;"><small style="background: #e0d0f0; padding: 2px 6px; border-radius: 4px; font-family: sans-serif; color: #5a3c6d;">Tagged: ${ev.band_members.map(escapeHTML).join(', ')}</small></div>` : ''}
+                <strong style="font-size: 20px;">${escapeHTML(ev.title)}</strong><br>
+                <small style="opacity:0.7; font-size: 15px;">${escapeHTML(ev.date)} @ ${escapeHTML(ev.time || '')} | By: ${escapeHTML(ev.created_by)}</small>
+                ${ev.description ? `<p style="margin: 6px 0 4px; font-size: 13px; opacity:0.8;">${escapeHTML(ev.description)}</p>` : ''}
+                ${ev.band_members && ev.band_members.length > 0 ? `<div style="margin-top:4px;"><small style="background:rgba(170,131,246,0.15); border:1px solid rgba(170,131,246,0.3); padding:2px 8px; border-radius:20px; color:#c8b8d8;">Tagged: ${ev.band_members.map(escapeHTML).join(', ')}</small></div>` : ''}
             </div>
-            <button onclick="deleteEvent('${ev.id}')" style="background:#ff4444;color:white;border:none;padding:5px 10px;border-radius:6px; cursor: pointer;" title="Delete Event">X</button>
+            <button onclick="deleteEvent('${ev.id}')" style="background:rgba(255,68,68,0.15);color:#ffb3b3;border:1px solid rgba(255,68,68,0.35);padding:5px 10px;border-radius:6px;cursor:pointer;" title="Delete Event">✕</button>
         </div>`).join('');
 }
 
@@ -394,17 +257,17 @@ function openDayModal(dateStr) {
     const list = document.getElementById('modalEventsList');
     list.innerHTML = dayEvents.map(ev => `
         <div class="modal-event" onclick="toggleModalDetails('${ev.id}')">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div>
                     <span class="modal-event-time">${escapeHTML(ev.time || 'All Day')}</span>
-                    <strong style="font-size: 20px; font-family: 'Rouge Script', cursive;">${escapeHTML(ev.title)}</strong>
+                    <strong style="font-size: 20px;">${escapeHTML(ev.title)}</strong>
                 </div>
-                <button onclick="loadEventIntoForm('${ev.id}', event)" style="background: #aa83f6; color: white; border: none; padding: 4px 10px; border-radius: 6px; font-family: sans-serif; font-size: 12px; cursor: pointer;">Edit</button>
+                <button onclick="loadEventIntoForm('${ev.id}', event)" style="background:rgba(170,131,246,0.2);color:lavender;border:1px solid rgba(170,131,246,0.4);padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;">Edit</button>
             </div>
             <div id="details_${ev.id}" class="modal-event-details">
-                <p style="margin: 0 0 10px 0; font-family: sans-serif;"><strong>Created By:</strong> ${escapeHTML(ev.created_by)}</p>
-                ${ev.description ? `<p style="margin: 0 0 10px 0; font-family: sans-serif;"><strong>Description:</strong><br>${escapeHTML(ev.description)}</p>` : ''}
-                ${ev.band_members && ev.band_members.length > 0 ? `<p style="margin: 0; font-family: sans-serif;"><span style="background: #e0d0f0; padding: 4px 8px; border-radius: 4px; color: #5a3c6d;"><strong>Tagged:</strong> ${ev.band_members.map(escapeHTML).join(', ')}</span></p>` : ''}
+                <p style="margin:0 0 8px;"><strong>Created By:</strong> ${escapeHTML(ev.created_by)}</p>
+                ${ev.description ? `<p style="margin:0 0 8px;"><strong>Description:</strong><br>${escapeHTML(ev.description)}</p>` : ''}
+                ${ev.band_members && ev.band_members.length > 0 ? `<p style="margin:0;"><span style="background:rgba(170,131,246,0.15);border:1px solid rgba(170,131,246,0.3);padding:3px 8px;border-radius:20px;color:#c8b8d8;"><strong>Tagged:</strong> ${ev.band_members.map(escapeHTML).join(', ')}</span></p>` : ''}
             </div>
         </div>
     `).join('');
@@ -427,12 +290,19 @@ function loadEventIntoForm(id, e) {
     const ev = globalEvents.find(event => event.id === id);
     if (!ev) return;
 
-    document.getElementById('eventId').value = ev.id; 
+    document.getElementById('eventId').value = ev.id;
     document.getElementById('title').value = unescapeHTML(ev.title);
     document.getElementById('date').value = ev.date;
     document.getElementById('time').value = ev.time || '';
-    document.getElementById('createdBy').value = unescapeHTML(ev.created_by);
     document.getElementById('description').value = unescapeHTML(ev.description || '');
+
+    // createdBy is a <select> — find the matching option
+    const createdBySelect = document.getElementById('createdBy');
+    if (createdBySelect) {
+        const name = unescapeHTML(ev.created_by);
+        const opt = Array.from(createdBySelect.options).find(o => o.value === name);
+        if (opt) createdBySelect.value = name;
+    }
 
     document.querySelectorAll('input[name="band_members"]').forEach(cb => cb.checked = false);
     
@@ -455,5 +325,6 @@ function unescapeHTML(str) {
 
 loadData();
 </script>
+<?php endif; ?>
 </body>
 </html>

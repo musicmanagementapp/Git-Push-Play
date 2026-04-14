@@ -58,7 +58,6 @@ $title = 'Create Account | GitPushPlay';
 }
 </style>
 
-    <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Clicker+Script&family=Imperial+Script&family=Rouge+Script&display=swap" rel="stylesheet">
 </head>
 
 <body>

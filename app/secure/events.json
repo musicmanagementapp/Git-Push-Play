@@ -21,5 +21,40 @@
         "band_members": [
             "Casey"
         ]
+    },
+    {
+        "id": "evt_69dd5c6fc9478",
+        "band_id": "e244065815a0866b",
+        "title": "Testing Git push play event",
+        "date": "2026-04-25",
+        "time": "21:15",
+        "created_by": "Justinator",
+        "description": "This is the events description",
+        "band_members": [
+            "GitPushPlay",
+            "Justinator"
+        ]
+    },
+    {
+        "id": "evt_69dd5cb1c63fd",
+        "band_id": "e244065815a0866b",
+        "title": "test",
+        "date": "2026-04-25",
+        "time": "17:15",
+        "created_by": "GitPushPlay",
+        "description": "test",
+        "band_members": [
+            "GitPushPlay"
+        ]
+    },
+    {
+        "id": "evt_69dd5f2632936",
+        "band_id": "e244065815a0866b",
+        "title": "Testing event #3",
+        "date": "2026-05-07",
+        "time": "17:27",
+        "created_by": "Justinator",
+        "description": "",
+        "band_members": []
     }
 ]

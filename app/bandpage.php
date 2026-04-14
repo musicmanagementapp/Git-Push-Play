@@ -17,6 +17,7 @@ $description = "Manage your band stats, uploads, and schedule.";
             max-width: 1200px;
             margin: 0 auto;
             font-family: "Belleza", sans-serif;
+            margin-top: 150px;
         }
 
         /* --- Section Buttons --- */

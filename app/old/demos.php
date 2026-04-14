@@ -1,13 +1,9 @@
-<?php include 'includes/_login.php'; ?>
-<?php
-$title       = "GitPushPlay — Demos";
-$description = "Upload, listen, and share your song drafts with your band.";
-?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include 'includes/_meta.php'; ?>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -101,7 +97,6 @@ $description = "Upload, listen, and share your song drafts with your band.";
 </head>
 <body>
 
-<?php include 'includes/_header.php'; ?>
 
 <main class="page">
     <div class="page-header">

@@ -15,11 +15,7 @@ if (!$gpUser || empty($gpUser['id'])) {
     exit;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Auto-create musician profile if missing
-|--------------------------------------------------------------------------
-*/
+
 if (!$gpMusician || empty($gpMusician['id'])) {
     $createResult = create_musician($gpUser['id'], []);
     if (!$createResult['success']) {
@@ -53,7 +49,8 @@ if ($file['error'] !== UPLOAD_ERR_OK) {
 $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 $maxSize = 3 * 1024 * 1024;
 
-$detectedMimeType = mime_content_type($file['tmp_name']);
+$imageInfo = getimagesize($file['tmp_name']);
+$detectedMimeType = $imageInfo['mime'] ?? '';
 if (!in_array($detectedMimeType, $allowedMimeTypes, true)) {
     $_SESSION['profile_error'] = "Only JPG, PNG, WEBP, and GIF files are allowed.";
     header('Location: artist-profile.php');

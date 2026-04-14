@@ -32,11 +32,15 @@ $title = 'Login | GitPushPlay';
 <head>
     <?php include __DIR__ . '/includes/_meta.php'; ?>
     <link rel="stylesheet" href="assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Belleza&family=Clicker+Script&family=Imperial+Script&family=Rouge+Script&display=swap" rel="stylesheet">
+    <style>
+        .auth-group{
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
-        <img src="Purpleblueexplo.png" class="star2">
+        <img src="assets/images/Purpleblueexplo.png" class="star2">
 </div>
 
     <main class="auth-shell">
