@@ -378,16 +378,16 @@ LOGIN PAGE
 }
 
 .auth-group input:focus {
-    border-color: rgba(170, 131, 246, 0.7);
+    border-color: rgba(255, 255, 255, 0.45);
 }
 
 .auth-btn {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 1px solid rgba(170, 131, 246, 0.6);
-    border-radius: 12px;
-    background: rgba(170, 131, 246, 0.15);
-    color: lavender;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
     cursor: pointer;
     font-family: "Belleza", sans-serif;
     font-size: 1rem;
@@ -396,8 +396,8 @@ LOGIN PAGE
 }
 
 .auth-btn:hover {
-    background: rgba(170, 131, 246, 0.3);
-    border-color: rgba(170, 131, 246, 0.9);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.45);
 }
 .star2 {
     position: fixed;
@@ -484,7 +484,7 @@ SETTINGS PAGE
 
 .settings-group input:focus {
     outline: none;
-    border-color: rgba(170, 131, 246, 0.7);
+    border-color: rgba(255, 255, 255, 0.45);
 }
 
 .settings-group input::placeholder {
@@ -561,10 +561,10 @@ SETTINGS PAGE
 /* --- Primary button --- */
 .primary-btn {
     padding: 0.6rem 1.6rem;
-    border: 1px solid rgba(170, 131, 246, 0.6);
-    border-radius: 12px;
-    background: rgba(170, 131, 246, 0.15);
-    color: lavender;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
     font-family: "Belleza", sans-serif;
     font-size: 1rem;
     cursor: pointer;
@@ -573,8 +573,8 @@ SETTINGS PAGE
 }
 
 .primary-btn:hover {
-    background: rgba(170, 131, 246, 0.3);
-    border-color: rgba(170, 131, 246, 0.9);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.45);
 }
 
 /*
@@ -659,7 +659,7 @@ BAND SECTION
     gap: 16px;
     flex-wrap: wrap;
     background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(170, 131, 246, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 14px 18px;
     margin-bottom: 20px;
@@ -675,7 +675,7 @@ BAND SECTION
     font-family: monospace;
     font-size: 1.5rem;
     letter-spacing: 6px;
-    color: #aa83f6;
+    color: rgba(255, 255, 255, 0.85);
     font-weight: bold;
 }
 
@@ -744,8 +744,8 @@ BAND SECTION
 }
 
 .band-member-role--owner {
-    border-color: rgba(170, 131, 246, 0.5);
-    color: #aa83f6;
+    border-color: rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.75);
 }
 
 .band-remove-btn {

@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(curl -s \"https://nonliminal.plscd.com/api/band_stats.json\")"
+      "Bash(curl -s \"https://nonliminal.plscd.com/api/band_stats.json\")",
+      "Skill(update-config)",
+      "Skill(update-config:*)"
     ]
   }
 }

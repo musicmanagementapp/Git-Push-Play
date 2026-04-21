@@ -352,14 +352,7 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                                     </div>
                                 <?php endif; ?>
 
-                                <?php if ($gpIsOwner): ?>
-                                    <div class="sld-join-code-block">
-                                        <span class="sld-join-code-label">Band Join Code</span>
-                                        <span class="sld-join-code"><?= htmlspecialchars($gpBand['joinCode'] ?? '') ?></span>
-                                        <span class="sld-join-code-hint">Share this with musicians you want to invite.</span>
-                                    </div>
-                                <?php endif; ?>
-
+                            
                                 <div class="sld-members-label">Members</div>
                                 <ul class="sld-member-list">
                                     <?php foreach ($gpBandMembers as $mem):
@@ -396,7 +389,7 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                         </div>
                     </div>
 
-                    <div class="settings-slide">
+                    <!-- <div class="settings-slide">
                         <div class="settings-slide-card">
                             <h2>Linked Services</h2>
 
@@ -446,16 +439,24 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                                 </form>
                             <?php endif; ?>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="settings-slide">
                         <div class="settings-slide-card">
-                            <h2>Account Actions</h2>
+                    
+                            <?php if ($gpBand && !$gpIsOwner): ?>
+                            <div class="sld-danger-row">
+                                <div class="sld-danger-row-info">
+                                    <span class="sld-danger-row-title">Leave Band</span>
+                                </div>
+                                <a href="leave_band.php" class="sld-danger-btn-hard">Leave Band</a>
+                            </div>
+                            <?php endif; ?>
 
                             <div class="sld-danger-row">
                                 <div class="sld-danger-row-info">
                                     <span class="sld-danger-row-title">Log Out</span>
-                                    <span class="sld-danger-row-desc">End your current session.</span>
+                                   
                                 </div>
                                 <a href="logout.php" class="sld-danger-btn-hard">Log Out</a>
                             </div>
@@ -463,7 +464,6 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                             <div class="sld-danger-row">
                                 <div class="sld-danger-row-info">
                                     <span class="sld-danger-row-title">Delete Account</span>
-                                    <span class="sld-danger-row-desc">Permanently remove your account and all associated data. This cannot be undone.</span>
                                 </div>
                                 <a href="delete_account.php" class="sld-danger-btn-hard">Delete Account</a>
                             </div>
@@ -480,7 +480,7 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                 <button class="slider-dot active" data-index="0" aria-label="Musician Profile"></button>
                 <button class="slider-dot" data-index="1" aria-label="Account Info"></button>
                 <button class="slider-dot" data-index="2" aria-label="Band"></button>
-                <button class="slider-dot" data-index="3" aria-label="Linked Services"></button>
+                <!-- <button class="slider-dot" data-index="3" aria-label="Linked Services"></button> -->
                 <button class="slider-dot" data-index="4" aria-label="Account Actions"></button>
             </div>
             <button class="slider-arrow" id="sliderNext" aria-label="Next">&#8250;</button>

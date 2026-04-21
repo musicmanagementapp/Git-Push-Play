@@ -81,12 +81,13 @@ if ($method === 'POST') {
         $data[] = [
             'id'           => uniqid('evt_'),
             'band_id'      => $bandId,
-            'title'        => htmlspecialchars($title),
-            'date'         => htmlspecialchars($date),
-            'time'         => htmlspecialchars($time),
-            'created_by'   => htmlspecialchars($createdBy),
-            'description'  => htmlspecialchars($description),
-            'band_members' => array_map('htmlspecialchars', (array)$bandMembers),
+            'title'        => $title,
+            'date'         => $date,
+            'time'         => $time,
+            'created_by'   => $createdBy,
+            'description'  => $description,
+            'band_members' => array_values((array)$bandMembers),
+            'is_public'    => (bool)($input['is_public'] ?? false),
         ];
 
         file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT), LOCK_EX);
@@ -117,12 +118,13 @@ if ($method === 'POST') {
                     echo json_encode(['success' => false, 'message' => 'Permission denied.']);
                     exit;
                 }
-                $event['title']        = htmlspecialchars($title);
-                $event['date']         = htmlspecialchars($date);
-                $event['time']         = htmlspecialchars($time);
-                $event['created_by']   = htmlspecialchars($createdBy);
-                $event['description']  = htmlspecialchars($description);
-                $event['band_members'] = array_map('htmlspecialchars', (array)$bandMembers);
+                $event['title']        = $title;
+                $event['date']         = $date;
+                $event['time']         = $time;
+                $event['created_by']   = $createdBy;
+                $event['description']  = $description;
+                $event['band_members'] = array_values((array)$bandMembers);
+                $event['is_public']    = (bool)($input['is_public'] ?? false);
                 $found = true;
                 break;
             }
