@@ -6,7 +6,6 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Resolve the band for the logged-in user from the server side
 require_once __DIR__ . '/data.php';
 
 $userId = $_SESSION['user_id'] ?? '';
@@ -28,7 +27,6 @@ if (!file_exists($file)) {
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-// ── GET: return only this band's events ──────────────────────────────────────
 if ($method === 'GET') {
     if ($bandId === null) {
         echo json_encode([]);
@@ -36,15 +34,20 @@ if ($method === 'GET') {
     }
 
     $data = json_decode(file_get_contents($file), true) ?: [];
-    $data = array_values(array_filter($data, fn($e) => ($e['band_id'] ?? null) === $bandId));
-    usort($data, fn($a, $b) => strtotime($a['date']) - strtotime($b['date']));
-    echo json_encode($data);
+    $filtered = [];
+    foreach ($data as $e) {
+        if (($e['band_id'] ?? null) === $bandId) {
+            $filtered[] = $e;
+        }
+    }
+    usort($filtered, function($a, $b) {
+        return strtotime($a['date']) - strtotime($b['date']);
+    });
+    echo json_encode($filtered);
     exit;
 }
 
-// ── POST: mutate ─────────────────────────────────────────────────────────────
 if ($method === 'POST') {
-    // CSRF validation
     $headers = function_exists('apache_request_headers') ? apache_request_headers() : [];
     $clientToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? ($headers['X-CSRF-Token'] ?? '');
 
@@ -64,7 +67,6 @@ if ($method === 'POST') {
     $action = $input['action'] ?? '';
     $data   = json_decode(file_get_contents($file), true) ?: [];
 
-    // ── Create ────────────────────────────────────────────────────────────────
     if ($action === 'create') {
         $title       = trim($input['title']       ?? '');
         $date        = trim($input['date']        ?? '');
@@ -95,7 +97,6 @@ if ($method === 'POST') {
         exit;
     }
 
-    // ── Update ────────────────────────────────────────────────────────────────
     if ($action === 'update') {
         $id          = $input['id']           ?? '';
         $title       = trim($input['title']   ?? '');
@@ -113,7 +114,6 @@ if ($method === 'POST') {
         $found = false;
         foreach ($data as &$event) {
             if ($event['id'] === $id) {
-                // Only allow editing events belonging to this band
                 if (($event['band_id'] ?? null) !== $bandId) {
                     echo json_encode(['success' => false, 'message' => 'Permission denied.']);
                     exit;
@@ -141,12 +141,16 @@ if ($method === 'POST') {
         exit;
     }
 
-    // ── Delete ────────────────────────────────────────────────────────────────
     if ($action === 'delete') {
         $id = $input['id'] ?? '';
-        $data = array_filter($data, fn($e) => !($e['id'] === $id && ($e['band_id'] ?? null) === $bandId));
+        $filtered = [];
+        foreach ($data as $e) {
+            if (!($e['id'] === $id && ($e['band_id'] ?? null) === $bandId)) {
+                $filtered[] = $e;
+            }
+        }
 
-        file_put_contents($file, json_encode(array_values($data), JSON_PRETTY_PRINT), LOCK_EX);
+        file_put_contents($file, json_encode(array_values($filtered), JSON_PRETTY_PRINT), LOCK_EX);
         echo json_encode(['success' => true, 'message' => 'Event deleted.']);
         exit;
     }

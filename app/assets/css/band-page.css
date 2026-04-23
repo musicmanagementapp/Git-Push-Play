@@ -6,7 +6,6 @@
             font-family: "Belleza", sans-serif;
         }
 
-        /* ── No-band notice ── */
         .no-band-notice {
             text-align: center;
             padding: 60px 40px;
@@ -23,7 +22,6 @@
             margin-bottom: 24px;
         }
 
-        /* ── Glass card base ── */
         .card {
             background: rgba(0, 0, 0, 0.35);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -34,7 +32,6 @@
             color: lavender;
         }
 
-        /* Card headings — no uppercase, no uniform tracking */
         .card h2 {
             font-family: "Belleza", sans-serif;
             font-size: 1rem;
@@ -46,7 +43,6 @@
             text-transform: uppercase;
         }
 
-        /* ── Band Hero ── */
         .band-hero {
             position: relative;
             overflow: hidden;
@@ -83,7 +79,6 @@
             flex-wrap: wrap;
         }
 
-        /* Plain white — the size does the work */
         .band-hero-name {
             font-family: "Belleza", sans-serif;
             font-size: 3.4rem;
@@ -110,7 +105,6 @@
             gap: 14px;
         }
 
-        /* Text link, not a button */
         .hero-public-btn {
             margin-left: auto;
             font-size: 0.82rem;
@@ -122,7 +116,6 @@
 
         .hero-public-btn:hover { color: #fff; }
 
-        /* ── Avatar stack ── */
         .avatar-stack {
             display: flex;
             flex-direction: row-reverse;
@@ -166,7 +159,6 @@
             letter-spacing: 0;
         }
 
-        /* ── Genre pill / meta ── */
         .genre-pill {
             align-self: flex-start;
             background: transparent;
@@ -184,7 +176,6 @@
             font-size: 0.8rem;
         }
 
-        /* Invite code — plain, no purple box */
         .join-code-block {
             display: inline-flex;
             align-items: center;
@@ -205,7 +196,6 @@
             font-family: monospace;
         }
 
-        /* ── Stats — asymmetric importance ── */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -220,7 +210,6 @@
 
         .stat-item:last-child { border-right: none; }
 
-        /* First two stats (views, followers) slightly bigger — they matter more */
         .stat-item:nth-child(1) .stat-num,
         .stat-item:nth-child(2) .stat-num { font-size: 2.8rem; }
 
@@ -240,7 +229,6 @@
             color: rgba(255, 255, 255, 0.3);
         }
 
-        /* ── Two-column grid — 3:2 asymmetric ── */
         .two-col-grid {
             display: grid;
             grid-template-columns: 3fr 2fr;
@@ -250,7 +238,6 @@
 
         .two-col-grid > .card { margin-bottom: 0; }
 
-        /* ── Upcoming Events ── */
         .events-list {
             display: flex;
             flex-direction: column;
@@ -271,7 +258,6 @@
 
         .event-item:hover { border-color: rgba(255, 255, 255, 0.18); }
 
-        /* Date badge — neutral, not purple */
         .event-date-badge {
             flex-shrink: 0;
             width: 42px;
@@ -314,7 +300,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Plain text link, not a button */
         .events-link {
             display: inline-block;
             font-size: 0.78rem;
@@ -327,7 +312,6 @@
 
         .events-link:hover { color: rgba(255, 255, 255, 0.8); }
 
-        /* ── Members grid ── */
         .members-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -384,7 +368,61 @@
             margin-bottom: 10px;
         }
 
-        /* Role — just a plain label, no pill */
+        .member-card { position: relative; }
+
+        .member-hover-info {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 190px;
+            background: rgba(12,6,24,0.98);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 10px;
+            padding: 12px 14px;
+            z-index: 200;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.15s, visibility 0.15s;
+            text-align: left;
+            white-space: normal;
+        }
+        .member-card:hover .member-hover-info {
+            opacity: 1;
+            visibility: visible;
+        }
+        .mhi-name {
+            font-size: 0.9rem;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        .mhi-role {
+            display: inline-block;
+            font-size: 0.68rem;
+            color: rgba(255,255,255,0.45);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 4px;
+            padding: 1px 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+        }
+        .mhi-city {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 6px;
+        }
+        .mhi-bio {
+            font-size: 0.78rem;
+            color: rgba(200,184,216,0.7);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
         .member-role {
             font-size: 0.65rem;
             letter-spacing: 0.14em;
@@ -395,7 +433,6 @@
             padding: 0;
         }
 
-        /* ── Upload zone ── */
         .upload-zone {
             position: relative;
             border: 1px dashed rgba(255, 255, 255, 0.15);
@@ -449,7 +486,6 @@
             margin: 0;
         }
 
-        /* ── Responsive ── */
         @media (max-width: 900px) {
             .stats-grid { grid-template-columns: repeat(3, 1fr); }
             .stat-item { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }

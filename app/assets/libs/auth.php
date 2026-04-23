@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 function users_file_path(): string
 {
     return __DIR__ . '/../../secure/users.json';
@@ -149,8 +147,13 @@ function update_user(string $id, array $fields): array
 
 function delete_user(string $id): bool
 {
-    $users   = read_users();
-    $filtered = array_values(array_filter($users, fn($u) => ($u['id'] ?? '') !== $id));
+    $users = read_users();
+    $filtered = [];
+    foreach ($users as $u) {
+        if (($u['id'] ?? '') !== $id) {
+            $filtered[] = $u;
+        }
+    }
 
     if (count($filtered) === count($users)) {
         return false;
@@ -183,7 +186,6 @@ function login_user(string $username, string $password): array
         session_start();
     }
 
-    // Migrate old accounts (no id/email/passwordHash) and update lastLogin
     $users = read_users();
     foreach ($users as &$u) {
         if (strtolower($u['username'] ?? '') === strtolower($user['username'])) {

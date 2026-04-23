@@ -35,18 +35,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php if ($gpBand): ?>
         <p style="color:var(--text-secondary);margin-bottom:8px;font-size:14px;">
-            You are about to leave <strong style="color:lavender;"><?= htmlspecialchars($gpBand['name']) ?></strong>.
+            You are about to leave <strong style="color:lavender;"><?php echo htmlspecialchars($gpBand['name']); ?></strong>.
             You can rejoin later with the invite code if you change your mind.
         </p>
 
         <?php if ($error !== ''): ?>
-            <div class="auth-message"><?= htmlspecialchars($error) ?></div>
+            <div class="auth-message"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
         <?php if (!$gpIsOwner): ?>
         <form method="post" action="leave_band.php">
             <button class="auth-btn delete-confirm-btn" type="submit" style="background:rgba(200,100,50,0.2);border-color:rgba(200,100,50,0.5);">
-                Leave <?= htmlspecialchars($gpBand['name']) ?>
+                Leave <?php echo htmlspecialchars($gpBand['name']); ?>
             </button>
         </form>
         <?php else: ?>

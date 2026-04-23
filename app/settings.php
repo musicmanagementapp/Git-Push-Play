@@ -15,7 +15,6 @@ $musician = $gpMusician;
 $band     = $gpBand;
 $isOwner  = $gpIsOwner;
 
-// ── Account Info ──────────────────────────────────────────────────────────────
 if ($section === 'account' && $gpUser) {
     $fields = [
         'email'    => trim($_POST['email']    ?? ''),
@@ -42,8 +41,8 @@ if ($section === 'account' && $gpUser) {
     $result = update_user($userId, $fields);
 
     if ($result['success']) {
-        $_SESSION['username']       = $fields['username'];
-        $_SESSION['email']          = $fields['email'];
+        $_SESSION['username']        = $fields['username'];
+        $_SESSION['email']           = $fields['email'];
         $_SESSION['profile_success'] = $result['message'];
     } else {
         $_SESSION['profile_error'] = $result['message'];
@@ -53,7 +52,6 @@ if ($section === 'account' && $gpUser) {
     exit;
 }
 
-// ── Create Band ───────────────────────────────────────────────────────────────
 if ($section === 'band_create' && $musician && !$band) {
     $fields = [
         'name'       => trim($_POST['band_name']       ?? ''),
@@ -76,7 +74,6 @@ if ($section === 'band_create' && $musician && !$band) {
     exit;
 }
 
-// ── Join Band ─────────────────────────────────────────────────────────────────
 if ($section === 'band_join' && $musician && !$band) {
     $code   = strtoupper(trim($_POST['join_code'] ?? ''));
     $result = join_band_by_code($code, $musician['id']);
@@ -91,7 +88,6 @@ if ($section === 'band_join' && $musician && !$band) {
     exit;
 }
 
-// ── Edit Band ─────────────────────────────────────────────────────────────────
 if ($section === 'band_edit' && $musician && $band && $isOwner) {
     $fields = [
         'name'       => trim($_POST['band_name']       ?? ''),
@@ -114,7 +110,6 @@ if ($section === 'band_edit' && $musician && $band && $isOwner) {
     exit;
 }
 
-// ── Remove Band Member ────────────────────────────────────────────────────────
 if ($section === 'band_remove' && $musician && $band && $isOwner) {
     $membershipId = $_POST['membership_id'] ?? '';
     $result       = remove_band_member($membershipId);
@@ -129,7 +124,6 @@ if ($section === 'band_remove' && $musician && $band && $isOwner) {
     exit;
 }
 
-// ── Linked Services ───────────────────────────────────────────────────────────
 if ($section === 'services' && $musician) {
     foreach (['spotify', 'youtube', 'soundcloud', 'bandcamp'] as $svcName) {
         $svcUserId = trim($_POST[$svcName . '_userId'] ?? '');
@@ -147,6 +141,18 @@ if ($section === 'services' && $musician) {
     exit;
 }
 
-// ── Fallback ──────────────────────────────────────────────────────────────────
+if ($section === 'disband' && $musician && $band && $isOwner) {
+    $result = disband_band($band['id'], $musician['id']);
+
+    if ($result['success']) {
+        $_SESSION['profile_success'] = $result['message'];
+    } else {
+        $_SESSION['profile_error'] = $result['message'];
+    }
+
+    header('Location: artist-profile.php');
+    exit;
+}
+
 header('Location: artist-profile.php');
 exit;

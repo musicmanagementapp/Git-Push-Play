@@ -32,8 +32,13 @@ $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
     if ($bandId === null) { echo json_encode([]); exit; }
     $data = json_decode(file_get_contents($sheetFile), true) ?: [];
-    $data = array_values(array_filter($data, fn($s) => ($s['band_id'] ?? null) === $bandId));
-    echo json_encode($data);
+    $filtered = [];
+    foreach ($data as $s) {
+        if (($s['band_id'] ?? null) === $bandId) {
+            $filtered[] = $s;
+        }
+    }
+    echo json_encode($filtered);
     exit;
 }
 
@@ -124,12 +129,14 @@ if ($method === 'POST') {
             }
         }
 
-        $data = array_values(array_filter(
-            $data,
-            fn($s) => !($s['id'] === $id && ($s['band_id'] ?? null) === $bandId)
-        ));
+        $filtered = [];
+        foreach ($data as $s) {
+            if (!($s['id'] === $id && ($s['band_id'] ?? null) === $bandId)) {
+                $filtered[] = $s;
+            }
+        }
 
-        file_put_contents($sheetFile, json_encode($data, JSON_PRETTY_PRINT), LOCK_EX);
+        file_put_contents($sheetFile, json_encode($filtered, JSON_PRETTY_PRINT), LOCK_EX);
         echo json_encode(['success' => true, 'message' => 'Sheet music deleted.']);
         exit;
     }

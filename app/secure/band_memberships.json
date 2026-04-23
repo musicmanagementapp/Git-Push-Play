@@ -16,5 +16,23 @@
         "status": "active",
         "invitedByMusicianId": "ecccbd993606de30",
         "joinedAt": "2026-03-26T15:53:49+00:00"
+    },
+    {
+        "id": "b45b83daebf61680",
+        "bandId": "15844cc2f086494d",
+        "musicianId": "3b7e7a83a5800d97",
+        "role": "owner",
+        "status": "disbanded",
+        "invitedByMusicianId": "3b7e7a83a5800d97",
+        "joinedAt": "2026-04-22T23:31:49+00:00"
+    },
+    {
+        "id": "0f879fc029e8a101",
+        "bandId": "e244065815a0866b",
+        "musicianId": "3b7e7a83a5800d97",
+        "role": "member",
+        "status": "active",
+        "invitedByMusicianId": "3b7e7a83a5800d97",
+        "joinedAt": "2026-04-23T00:09:03+00:00"
     }
 ]

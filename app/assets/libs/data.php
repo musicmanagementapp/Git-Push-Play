@@ -1,11 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
-// ---------------------------------------------------------------------------
-// Generic helpers
-// ---------------------------------------------------------------------------
-
 function secure_path(string $filename): string
 {
     return __DIR__ . '/../../secure/' . $filename;
@@ -39,12 +33,7 @@ function gen_id(): string
     return bin2hex(random_bytes(8));
 }
 
-// ---------------------------------------------------------------------------
-// Musicians
-// ---------------------------------------------------------------------------
-
 function musicians_path(): string { return secure_path('musicians.json'); }
-
 function read_musicians(): array  { return read_json(musicians_path()); }
 
 function find_musician_by_user_id(string $userId): ?array
@@ -115,12 +104,7 @@ function update_musician(string $id, array $fields): array
     return ['success' => true, 'message' => 'Musician profile updated.'];
 }
 
-// ---------------------------------------------------------------------------
-// Bands
-// ---------------------------------------------------------------------------
-
 function bands_path(): string { return secure_path('bands.json'); }
-
 function read_bands(): array  { return read_json(bands_path()); }
 
 function find_band_by_id(string $id): ?array
@@ -139,6 +123,15 @@ function generate_join_code(): string
         $code .= $chars[random_int(0, strlen($chars) - 1)];
     }
     return $code;
+}
+
+function find_band_by_name(string $name): ?array
+{
+    $name = strtolower(trim($name));
+    foreach (read_bands() as $b) {
+        if (strtolower(trim($b['name'] ?? '')) === $name) return $b;
+    }
+    return null;
 }
 
 function find_band_by_join_code(string $code): ?array
@@ -214,12 +207,15 @@ function join_band_by_code(string $code, string $musicianId): array
         return ['success' => false, 'message' => 'Invalid band code. No band found.'];
     }
 
-    $existing = array_filter(
-        read_memberships(),
-        fn($m) => ($m['bandId'] ?? '') === $band['id'] && ($m['musicianId'] ?? '') === $musicianId
-    );
+    $alreadyMember = false;
+    foreach (read_memberships() as $m) {
+        if (($m['bandId'] ?? '') === $band['id'] && ($m['musicianId'] ?? '') === $musicianId) {
+            $alreadyMember = true;
+            break;
+        }
+    }
 
-    if (!empty($existing)) {
+    if ($alreadyMember) {
         return ['success' => false, 'message' => 'You are already a member of this band.'];
     }
 
@@ -230,17 +226,18 @@ function join_band_by_code(string $code, string $musicianId): array
     return ['success' => true, 'message' => 'Joined band "' . $band['name'] . '" successfully!', 'bandId' => $band['id']];
 }
 
-// ---------------------------------------------------------------------------
-// Band Memberships
-// ---------------------------------------------------------------------------
-
 function memberships_path(): string { return secure_path('band_memberships.json'); }
-
 function read_memberships(): array  { return read_json(memberships_path()); }
 
 function get_memberships_for_musician(string $musicianId): array
 {
-    return array_values(array_filter(read_memberships(), fn($m) => ($m['musicianId'] ?? '') === $musicianId));
+    $result = [];
+    foreach (read_memberships() as $m) {
+        if (($m['musicianId'] ?? '') === $musicianId) {
+            $result[] = $m;
+        }
+    }
+    return $result;
 }
 
 function get_active_band_for_musician(string $musicianId): ?array
@@ -267,17 +264,48 @@ function get_membership_for_musician_in_band(string $musicianId, string $bandId)
 
 function get_band_members(string $bandId): array
 {
-    $memberships = array_values(array_filter(
-        read_memberships(),
-        fn($m) => ($m['bandId'] ?? '') === $bandId && ($m['status'] ?? '') === 'active'
-    ));
-
-    foreach ($memberships as &$mem) {
-        $mem['musician'] = find_musician_by_id($mem['musicianId'] ?? '') ?? [];
+    $result = [];
+    foreach (read_memberships() as $m) {
+        if (($m['bandId'] ?? '') === $bandId && ($m['status'] ?? '') === 'active') {
+            $m['musician'] = find_musician_by_id($m['musicianId'] ?? '') ?? [];
+            $result[] = $m;
+        }
     }
-    unset($mem);
+    return $result;
+}
 
-    return $memberships;
+function disband_band(string $bandId, string $ownerMusicianId): array
+{
+    $band = find_band_by_id($bandId);
+    if (!$band) return ['success' => false, 'message' => 'Band not found.'];
+    if (($band['ownerMusicianId'] ?? '') !== $ownerMusicianId) {
+        return ['success' => false, 'message' => 'Only the band owner can disband.'];
+    }
+
+    $memberships = read_memberships();
+    foreach ($memberships as &$m) {
+        if (($m['bandId'] ?? '') === $bandId) {
+            $m['status'] = 'disbanded';
+        }
+    }
+    unset($m);
+    if (!write_json(memberships_path(), $memberships)) {
+        return ['success' => false, 'message' => 'Could not update memberships.'];
+    }
+
+    $bands = read_bands();
+    foreach ($bands as &$b) {
+        if (($b['id'] ?? '') === $bandId) {
+            $b['isActive'] = false;
+            break;
+        }
+    }
+    unset($b);
+    if (!write_json(bands_path(), $bands)) {
+        return ['success' => false, 'message' => 'Could not update band.'];
+    }
+
+    return ['success' => true, 'message' => 'Band disbanded.'];
 }
 
 function remove_band_member(string $membershipId): array
@@ -323,12 +351,7 @@ function create_membership(string $bandId, string $musicianId, string $role, str
     return ['success' => true, 'message' => 'Membership created.'];
 }
 
-// ---------------------------------------------------------------------------
-// Venues
-// ---------------------------------------------------------------------------
-
 function venues_path(): string { return secure_path('venues.json'); }
-
 function read_venues(): array  { return read_json(venues_path()); }
 
 function find_venue_by_id(string $id): ?array
@@ -358,17 +381,18 @@ function create_venue(array $fields): array
     return ['success' => true, 'message' => 'Venue created.'];
 }
 
-// ---------------------------------------------------------------------------
-// Events
-// ---------------------------------------------------------------------------
-
 function events_path(): string { return secure_path('events.json'); }
-
 function read_events(): array  { return read_json(events_path()); }
 
 function get_events_for_band(string $bandId): array
 {
-    return array_values(array_filter(read_events(), fn($e) => ($e['bandId'] ?? '') === $bandId));
+    $result = [];
+    foreach (read_events() as $e) {
+        if (($e['bandId'] ?? '') === $bandId) {
+            $result[] = $e;
+        }
+    }
+    return $result;
 }
 
 function create_event(array $fields): array
@@ -392,17 +416,18 @@ function create_event(array $fields): array
     return ['success' => true, 'message' => 'Event created.'];
 }
 
-// ---------------------------------------------------------------------------
-// Linked Services
-// ---------------------------------------------------------------------------
-
 function linked_services_path(): string { return secure_path('linked_services.json'); }
-
 function read_linked_services(): array  { return read_json(linked_services_path()); }
 
 function get_services_for_musician(string $musicianId): array
 {
-    return array_values(array_filter(read_linked_services(), fn($s) => ($s['musicianId'] ?? '') === $musicianId));
+    $result = [];
+    foreach (read_linked_services() as $s) {
+        if (($s['musicianId'] ?? '') === $musicianId) {
+            $result[] = $s;
+        }
+    }
+    return $result;
 }
 
 function upsert_linked_service(string $musicianId, string $serviceName, array $fields): array

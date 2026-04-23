@@ -29,21 +29,23 @@ if (!file_exists($tracksFile)) {
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-// ── GET: return this band's tracks ───────────────────────────────────────────
 if ($method === 'GET') {
     if ($bandId === null) {
         echo json_encode([]);
         exit;
     }
     $data = json_decode(file_get_contents($tracksFile), true) ?: [];
-    $data = array_values(array_filter($data, fn($t) => ($t['band_id'] ?? null) === $bandId));
-    echo json_encode($data);
+    $filtered = [];
+    foreach ($data as $t) {
+        if (($t['band_id'] ?? null) === $bandId) {
+            $filtered[] = $t;
+        }
+    }
+    echo json_encode($filtered);
     exit;
 }
 
-// ── POST ─────────────────────────────────────────────────────────────────────
 if ($method === 'POST') {
-    // CSRF — check header first, then POST field (for multipart uploads)
     $headers     = function_exists('apache_request_headers') ? apache_request_headers() : [];
     $clientToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? ($headers['X-CSRF-Token'] ?? '');
     if (empty($clientToken)) {
@@ -62,7 +64,6 @@ if ($method === 'POST') {
         exit;
     }
 
-    // ── Upload ────────────────────────────────────────────────────────────────
     if (isset($_FILES['track'])) {
         $file = $_FILES['track'];
 
@@ -127,7 +128,6 @@ if ($method === 'POST') {
         exit;
     }
 
-    // ── Delete (JSON body) ────────────────────────────────────────────────────
     $input  = json_decode(file_get_contents('php://input'), true) ?? [];
     $action = $input['action'] ?? '';
 
@@ -145,12 +145,14 @@ if ($method === 'POST') {
             }
         }
 
-        $data = array_values(array_filter(
-            $data,
-            fn($t) => !($t['id'] === $id && ($t['band_id'] ?? null) === $bandId)
-        ));
+        $filtered = [];
+        foreach ($data as $t) {
+            if (!($t['id'] === $id && ($t['band_id'] ?? null) === $bandId)) {
+                $filtered[] = $t;
+            }
+        }
 
-        file_put_contents($tracksFile, json_encode($data, JSON_PRETTY_PRINT), LOCK_EX);
+        file_put_contents($tracksFile, json_encode($filtered, JSON_PRETTY_PRINT), LOCK_EX);
         echo json_encode(['success' => true, 'message' => 'Track deleted.']);
         exit;
     }

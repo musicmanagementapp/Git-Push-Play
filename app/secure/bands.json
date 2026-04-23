@@ -8,5 +8,15 @@
         "isActive": true,
         "joinCode": "FB8W38",
         "createdAt": "2026-03-26T15:53:28+00:00"
+    },
+    {
+        "id": "15844cc2f086494d",
+        "name": "Testing band Create",
+        "genre": "Testing band Create",
+        "ownerMusicianId": "3b7e7a83a5800d97",
+        "formedYear": "2002",
+        "isActive": false,
+        "joinCode": "NCCBZW",
+        "createdAt": "2026-04-22T23:31:49+00:00"
     }
 ]

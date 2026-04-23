@@ -118,7 +118,7 @@ include 'includes/_header.php';
 </div>
 
 <div id="dayModal" class="modal-overlay">
-    <div class="modal-content">
+    <div class="modal-content" style="background: linear-gradient(90deg, rgba(170, 131, 246, .03), rgba(255, 182, 137, .03))">
         <div class="modal-header">
             <h2 id="modalDateTitle" style="margin:0; font-size: 28px;"></h2>
             <button class="modal-close" onclick="closeDayModal()">Close</button>

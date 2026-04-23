@@ -27,11 +27,6 @@ if (!in_array($field, $allowedFields, true)) {
     exit;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Auto-create musician profile if missing
-|--------------------------------------------------------------------------
-*/
 if (!$gpUser || empty($gpUser['id'])) {
     $_SESSION['profile_error'] = "User not found.";
     header('Location: ../../artist-profile.php');
@@ -46,7 +41,6 @@ if (!$gpMusician || empty($gpMusician['id'])) {
         exit;
     }
 
-    // Reload musician after creation
     $gpMusician = find_musician_by_user_id($gpUser['id']);
     if (!$gpMusician || empty($gpMusician['id'])) {
         $_SESSION['profile_error'] = "Musician profile could not be loaded.";
@@ -55,11 +49,6 @@ if (!$gpMusician || empty($gpMusician['id'])) {
     }
 }
 
-/*
-|--------------------------------------------------------------------------
-| Musician fields
-|--------------------------------------------------------------------------
-*/
 if (in_array($field, ['stage_name', 'location', 'instrument', 'bio'], true)) {
     $musicianFieldMap = [
         'stage_name' => 'stageName',
@@ -85,11 +74,6 @@ if (in_array($field, ['stage_name', 'location', 'instrument', 'bio'], true)) {
     exit;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Band fields
-|--------------------------------------------------------------------------
-*/
 if (in_array($field, ['band_name', 'genre'], true)) {
     if (!$gpBand || empty($gpBand['id'])) {
         $_SESSION['profile_error'] = "Active band not found.";

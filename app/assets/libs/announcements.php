@@ -33,9 +33,16 @@ $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'GET') {
     if ($bandId === null) { echo json_encode([]); exit; }
     $data = json_decode(file_get_contents($file), true) ?: [];
-    $data = array_values(array_filter($data, fn($a) => ($a['band_id'] ?? null) === $bandId));
-    usort($data, fn($a, $b) => strcmp($b['created_at'], $a['created_at']));
-    echo json_encode($data);
+    $filtered = [];
+    foreach ($data as $a) {
+        if (($a['band_id'] ?? null) === $bandId) {
+            $filtered[] = $a;
+        }
+    }
+    usort($filtered, function($a, $b) {
+        return strcmp($b['created_at'], $a['created_at']);
+    });
+    echo json_encode($filtered);
     exit;
 }
 
@@ -97,12 +104,14 @@ if ($method === 'POST') {
 
         $id   = $input['id'] ?? '';
         $data = json_decode(file_get_contents($file), true) ?: [];
-        $data = array_values(array_filter(
-            $data,
-            fn($a) => !($a['id'] === $id && ($a['band_id'] ?? null) === $bandId)
-        ));
+        $filtered = [];
+        foreach ($data as $a) {
+            if (!($a['id'] === $id && ($a['band_id'] ?? null) === $bandId)) {
+                $filtered[] = $a;
+            }
+        }
 
-        file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT), LOCK_EX);
+        file_put_contents($file, json_encode($filtered, JSON_PRETTY_PRINT), LOCK_EX);
         echo json_encode(['success' => true, 'message' => 'Announcement deleted.']);
         exit;
     }
