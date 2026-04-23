@@ -40,7 +40,7 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
     <?php if ($successMessage !== ''): ?>
         <div class="profile-toast-container">
             <div class="profile-toast profile-toast-success" id="success-toast">
-                <span><?= htmlspecialchars($successMessage) ?></span>
+                <span><?php echo htmlspecialchars($successMessage); ?></span>
                 <button type="button" class="profile-toast-close" onclick="closeToast('success-toast')" aria-label="Close message">&times;</button>
             </div>
         </div>
@@ -49,7 +49,7 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
     <?php if ($errorMessage !== ''): ?>
         <div class="profile-toast-container">
             <div class="profile-toast profile-toast-error" id="error-toast">
-                <span><?= htmlspecialchars($errorMessage) ?></span>
+                <span><?php echo htmlspecialchars($errorMessage); ?></span>
                 <button type="button" class="profile-toast-close" onclick="closeToast('error-toast')" aria-label="Close message">&times;</button>
             </div>
         </div>
@@ -57,7 +57,7 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
 
     <section class="settings-slider-shell">
         <h2 class="settings-slider-title">
-            <?= htmlspecialchars(trim($stageName) !== '' ? $stageName : 'Your Profile') ?>
+            <?php echo htmlspecialchars(trim($stageName) !== '' ? $stageName : 'Your Profile'); ?>
         </h2>
 
         <div class="settings-slider-wrapper">
@@ -75,7 +75,7 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                                         <div class="profile-avatar-wrap profile-avatar-interactive" onclick="triggerPhotoPicker()">
                                             <?php if ($hasProfileImage): ?>
                                                 <img
-                                                    src="<?= htmlspecialchars($profileImage) ?>"
+                                                    src="<?php echo htmlspecialchars($profileImage); ?>"
                                                     alt="Profile Picture"
                                                     id="profileImagePreview"
                                                 >
@@ -112,7 +112,7 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                                                 onclick="triggerPhotoPicker()"
                                                 id="uploadBtn"
                                             >
-                                                <?= $hasProfileImage ? 'Change Photo' : 'Add Photo' ?>
+                                                <?php echo $hasProfileImage ? 'Change Photo' : 'Add Photo'; ?>
                                             </button>
 
                                             <button
@@ -143,29 +143,29 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                                         foreach ($fields as $fieldName => $fieldData):
                                             $isEmpty = trim($fieldData['value']) === '';
                                         ?>
-                                            <div class="profile-inline-row" onclick="toggleEdit('<?= htmlspecialchars($fieldName) ?>')">
+                                            <div class="profile-inline-row" onclick="toggleEdit('<?php echo htmlspecialchars($fieldName); ?>')">
                                                 <div class="profile-inline-left">
-                                                    <span class="profile-inline-label"><?= htmlspecialchars($fieldData['label']) ?></span>
+                                                    <span class="profile-inline-label"><?php echo htmlspecialchars($fieldData['label']); ?></span>
 
-                                                    <div class="profile-inline-value <?= $isEmpty ? 'profile-placeholder' : '' ?>">
-                                                        <?= htmlspecialchars(displayValue($fieldData['value'], $fieldData['placeholder'])) ?>
+                                                    <div class="profile-inline-value <?php echo $isEmpty ? 'profile-placeholder' : ''; ?>">
+                                                        <?php echo htmlspecialchars(displayValue($fieldData['value'], $fieldData['placeholder'])); ?>
                                                     </div>
 
                                                     <form class="profile-edit-form"
-                                                          id="form-<?= htmlspecialchars($fieldName) ?>"
+                                                          id="form-<?php echo htmlspecialchars($fieldName); ?>"
                                                           action="assets/libs/profileFieldUpdate.php"
                                                           method="post"
                                                           onclick="event.stopPropagation();">
-                                                        <input type="hidden" name="field_name" value="<?= htmlspecialchars($fieldName) ?>">
+                                                        <input type="hidden" name="field_name" value="<?php echo htmlspecialchars($fieldName); ?>">
                                                         <input
-                                                            type="<?= htmlspecialchars($fieldData['type']) ?>"
+                                                            type="<?php echo htmlspecialchars($fieldData['type']); ?>"
                                                             name="field_value"
-                                                            value="<?= htmlspecialchars($fieldData['value']) ?>"
-                                                            placeholder="<?= htmlspecialchars($fieldData['placeholder']) ?>"
+                                                            value="<?php echo htmlspecialchars($fieldData['value']); ?>"
+                                                            placeholder="<?php echo htmlspecialchars($fieldData['placeholder']); ?>"
                                                         >
                                                         <div class="edit-form-actions">
                                                             <button type="submit" class="primary-btn">Save</button>
-                                                            <button type="button" class="secondary-btn-inline" onclick="cancelEdit('<?= htmlspecialchars($fieldName) ?>')">Cancel</button>
+                                                            <button type="button" class="secondary-btn-inline" onclick="cancelEdit('<?php echo htmlspecialchars($fieldName); ?>')">Cancel</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -176,8 +176,8 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                                             <div class="profile-inline-left">
                                                 <span class="profile-inline-label">Bio</span>
 
-                                                <div class="profile-inline-value <?= trim($bio) === '' ? 'profile-placeholder' : '' ?>">
-                                                    <?= nl2br(htmlspecialchars(displayValue($bio, "Enter bio"))) ?>
+                                                <div class="profile-inline-value <?php echo trim($bio) === '' ? 'profile-placeholder' : ''; ?>">
+                                                    <?php echo nl2br(htmlspecialchars(displayValue($bio, "Enter bio"))); ?>
                                                 </div>
 
                                                 <form class="profile-edit-form"
@@ -186,7 +186,7 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                                                       method="post"
                                                       onclick="event.stopPropagation();">
                                                     <input type="hidden" name="field_name" value="bio">
-                                                    <textarea name="field_value" rows="5" placeholder="Enter bio"><?= htmlspecialchars($bio) ?></textarea>
+                                                    <textarea name="field_value" rows="5" placeholder="Enter bio"><?php echo htmlspecialchars($bio); ?></textarea>
                                                     <div class="edit-form-actions">
                                                         <button type="submit" class="primary-btn">Save</button>
                                                         <button type="button" class="secondary-btn-inline" onclick="cancelEdit('bio')">Cancel</button>
@@ -207,8 +207,8 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                             <h2>Account Info</h2>
 
                             <?php if (isset($messages['account'])): ?>
-                                <div class="sld-msg sld-msg--<?= $messages['account']['type'] ?>">
-                                    <?= htmlspecialchars($messages['account']['text']) ?>
+                                <div class="sld-msg sld-msg--<?php echo $messages['account']['type']; ?>">
+                                    <?php echo htmlspecialchars($messages['account']['text']); ?>
                                 </div>
                             <?php endif; ?>
 
@@ -218,14 +218,14 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                                 <div class="sld-group">
                                     <label for="sld_username">Username</label>
                                     <input type="text" id="sld_username" name="username"
-                                           value="<?= htmlspecialchars($gpUser['username'] ?? $_SESSION['username'] ?? '') ?>"
+                                           value="<?php echo htmlspecialchars($gpUser['username'] ?? $_SESSION['username'] ?? ''); ?>"
                                            required minlength="3">
                                 </div>
 
                                 <div class="sld-group">
                                     <label for="sld_email">Email</label>
                                     <input type="email" id="sld_email" name="email"
-                                           value="<?= htmlspecialchars($gpUser['email'] ?? $_SESSION['email'] ?? '') ?>">
+                                           value="<?php echo htmlspecialchars($gpUser['email'] ?? $_SESSION['email'] ?? ''); ?>">
                                 </div>
 
                                 <fieldset class="sld-fieldset">
@@ -254,8 +254,8 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                             <h2>Band</h2>
 
                             <?php if (isset($messages['band'])): ?>
-                                <div class="sld-msg sld-msg--<?= $messages['band']['type'] ?>">
-                                    <?= htmlspecialchars($messages['band']['text']) ?>
+                                <div class="sld-msg sld-msg--<?php echo $messages['band']['type']; ?>">
+                                    <?php echo htmlspecialchars($messages['band']['text']); ?>
                                 </div>
                             <?php endif; ?>
 
@@ -280,7 +280,7 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                                             <div class="sld-group">
                                                 <label for="sld_band_year">Year Formed</label>
                                                 <input type="number" id="sld_band_year" name="band_formedYear"
-                                                       min="1900" max="<?= date('Y') ?>" placeholder="<?= date('Y') ?>">
+                                                       min="1900" max="<?php echo date('Y'); ?>" placeholder="<?php echo date('Y'); ?>">
                                             </div>
                                             <div class="sld-actions">
                                                 <button type="submit" class="primary-btn">Create Band</button>
@@ -317,18 +317,18 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                                             <div class="sld-group">
                                                 <label for="sld_edit_band_name">Band Name</label>
                                                 <input type="text" id="sld_edit_band_name" name="band_name"
-                                                       value="<?= htmlspecialchars($gpBand['name'] ?? '') ?>" required>
+                                                       value="<?php echo htmlspecialchars($gpBand['name'] ?? ''); ?>" required>
                                             </div>
                                             <div class="sld-group">
                                                 <label for="sld_edit_band_genre">Genre</label>
                                                 <input type="text" id="sld_edit_band_genre" name="band_genre"
-                                                       value="<?= htmlspecialchars($gpBand['genre'] ?? '') ?>">
+                                                       value="<?php echo htmlspecialchars($gpBand['genre'] ?? ''); ?>">
                                             </div>
                                             <div class="sld-group">
                                                 <label for="sld_edit_band_year">Year Formed</label>
                                                 <input type="number" id="sld_edit_band_year" name="band_formedYear"
-                                                       min="1900" max="<?= date('Y') ?>"
-                                                       value="<?= htmlspecialchars($gpBand['formedYear'] ?? '') ?>">
+                                                       min="1900" max="<?php echo date('Y'); ?>"
+                                                       value="<?php echo htmlspecialchars($gpBand['formedYear'] ?? ''); ?>">
                                             </div>
                                         </div>
                                         <div class="sld-actions" style="margin-bottom:14px;">
@@ -339,26 +339,19 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                                     <div class="sld-band-header">
                                         <div class="sld-band-info-row">
                                             <span class="sld-band-info-label">Band Name</span>
-                                            <span class="sld-band-info-value"><?= htmlspecialchars($gpBand['name'] ?? '') ?></span>
+                                            <span class="sld-band-info-value"><?php echo htmlspecialchars($gpBand['name'] ?? ''); ?></span>
                                         </div>
                                         <div class="sld-band-info-row">
                                             <span class="sld-band-info-label">Genre</span>
-                                            <span class="sld-band-info-value"><?= htmlspecialchars($gpBand['genre'] ?? '—') ?></span>
+                                            <span class="sld-band-info-value"><?php echo htmlspecialchars($gpBand['genre'] ?? '—'); ?></span>
                                         </div>
                                         <div class="sld-band-info-row">
                                             <span class="sld-band-info-label">Formed</span>
-                                            <span class="sld-band-info-value"><?= htmlspecialchars($gpBand['formedYear'] ?? '—') ?></span>
+                                            <span class="sld-band-info-value"><?php echo htmlspecialchars($gpBand['formedYear'] ?? '—'); ?></span>
                                         </div>
                                     </div>
                                 <?php endif; ?>
 
-                                <?php if ($gpIsOwner): ?>
-                                    <div class="sld-join-code-block">
-                                        <span class="sld-join-code-label">Band Join Code</span>
-                                        <span class="sld-join-code"><?= htmlspecialchars($gpBand['joinCode'] ?? '') ?></span>
-                                        <span class="sld-join-code-hint">Share this with musicians you want to invite.</span>
-                                    </div>
-                                <?php endif; ?>
 
                                 <div class="sld-members-label">Members</div>
                                 <ul class="sld-member-list">
@@ -373,17 +366,17 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                                     <li class="sld-member-row">
                                         <div class="sld-member-info">
                                             <span class="sld-member-name">
-                                                <?= htmlspecialchars($mName) ?>
+                                                <?php echo htmlspecialchars($mName); ?>
                                                 <?php if ($isMe): ?><span class="sld-member-you">(you)</span><?php endif; ?>
                                             </span>
-                                            <span class="sld-member-role"><?= htmlspecialchars(ucfirst($mRole)) ?></span>
+                                            <span class="sld-member-role"><?php echo htmlspecialchars(ucfirst($mRole)); ?></span>
                                         </div>
                                         <?php if ($gpIsOwner && !$isMe): ?>
                                             <form method="post" action="settings.php" style="margin:0;">
                                                 <input type="hidden" name="section" value="band_remove">
-                                                <input type="hidden" name="membership_id" value="<?= htmlspecialchars($mem['id']) ?>">
+                                                <input type="hidden" name="membership_id" value="<?php echo htmlspecialchars($mem['id']); ?>">
                                                 <button type="submit" class="sld-remove-btn"
-                                                        onclick="return confirm('Remove <?= htmlspecialchars(addslashes($mName)) ?> from the band?')">
+                                                        onclick="return confirm('Remove <?php echo htmlspecialchars(addslashes($mName)); ?> from the band?')">
                                                     Remove
                                                 </button>
                                             </form>
@@ -396,66 +389,35 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                         </div>
                     </div>
 
+
                     <div class="settings-slide">
                         <div class="settings-slide-card">
-                            <h2>Linked Services</h2>
 
-                            <?php if (!$gpMusician): ?>
-                                <p class="sld-notice">Save a musician profile first to link streaming services.</p>
-                            <?php else: ?>
-
-                                <?php if (isset($messages['services'])): ?>
-                                    <div class="sld-msg sld-msg--<?= $messages['services']['type'] ?>">
-                                        <?= htmlspecialchars($messages['services']['text']) ?>
-                                    </div>
-                                <?php endif; ?>
-
-                                <form method="post" action="settings.php">
-                                    <input type="hidden" name="section" value="services">
-
-                                    <?php
-                                    $sldServiceLabels = [
-                                        'spotify'    => 'Spotify',
-                                        'youtube'    => 'YouTube',
-                                        'soundcloud' => 'SoundCloud',
-                                        'bandcamp'   => 'Bandcamp',
-                                    ];
-                                    foreach ($sldServiceLabels as $key => $label):
-                                        $svc = $gpServiceMap[$key] ?? [];
-                                    ?>
-                                    <fieldset class="sld-fieldset">
-                                        <legend><?= $label ?></legend>
-                                        <div class="sld-row">
-                                            <div class="sld-group">
-                                                <label for="sld_<?= $key ?>_userId"><?= $label ?> Artist ID</label>
-                                                <input type="text" id="sld_<?= $key ?>_userId" name="<?= $key ?>_userId"
-                                                       value="<?= htmlspecialchars($svc['serviceUserId'] ?? '') ?>">
-                                            </div>
-                                            <div class="sld-group">
-                                                <label for="sld_<?= $key ?>_url">Profile URL</label>
-                                                <input type="url" id="sld_<?= $key ?>_url" name="<?= $key ?>_url"
-                                                       value="<?= htmlspecialchars($svc['profileUrl'] ?? '') ?>">
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                    <?php endforeach; ?>
-
-                                    <div class="sld-actions">
-                                        <button type="submit" class="primary-btn">Save Linked Services</button>
-                                    </div>
-                                </form>
+                            <?php if ($gpBand && !$gpIsOwner): ?>
+                            <div class="sld-danger-row">
+                                <div class="sld-danger-row-info">
+                                    <span class="sld-danger-row-title">Leave Band</span>
+                                </div>
+                                <a href="leave_band.php" class="sld-danger-btn-hard">Leave Band</a>
+                            </div>
                             <?php endif; ?>
-                        </div>
-                    </div>
 
-                    <div class="settings-slide">
-                        <div class="settings-slide-card">
-                            <h2>Account Actions</h2>
+                            <?php if ($gpBand && $gpIsOwner): ?>
+                            <div class="sld-danger-row">
+                                <div class="sld-danger-row-info">
+                                    <span class="sld-danger-row-title">Disband Band</span>
+                                </div>
+                                <form method="post" action="settings.php" style="margin:0;"
+                                      onsubmit="return confirm('Permanently disband <?php echo htmlspecialchars(addslashes($gpBand['name'])); ?>? All members will be removed. This cannot be undone.');">
+                                    <input type="hidden" name="section" value="disband">
+                                    <button type="submit" class="sld-danger-btn-hard">Disband Band</button>
+                                </form>
+                            </div>
+                            <?php endif; ?>
 
                             <div class="sld-danger-row">
                                 <div class="sld-danger-row-info">
                                     <span class="sld-danger-row-title">Log Out</span>
-                                    <span class="sld-danger-row-desc">End your current session.</span>
                                 </div>
                                 <a href="logout.php" class="sld-danger-btn-hard">Log Out</a>
                             </div>
@@ -463,7 +425,6 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                             <div class="sld-danger-row">
                                 <div class="sld-danger-row-info">
                                     <span class="sld-danger-row-title">Delete Account</span>
-                                    <span class="sld-danger-row-desc">Permanently remove your account and all associated data. This cannot be undone.</span>
                                 </div>
                                 <a href="delete_account.php" class="sld-danger-btn-hard">Delete Account</a>
                             </div>
@@ -480,8 +441,7 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
                 <button class="slider-dot active" data-index="0" aria-label="Musician Profile"></button>
                 <button class="slider-dot" data-index="1" aria-label="Account Info"></button>
                 <button class="slider-dot" data-index="2" aria-label="Band"></button>
-                <button class="slider-dot" data-index="3" aria-label="Linked Services"></button>
-                <button class="slider-dot" data-index="4" aria-label="Account Actions"></button>
+                <button class="slider-dot" data-index="3" aria-label="Account Actions"></button>
             </div>
             <button class="slider-arrow" id="sliderNext" aria-label="Next">&#8250;</button>
         </div>
@@ -583,7 +543,6 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
         closeToast('error-toast');
     }, 3000);
 
-    // ── Settings Slider ──
     (function () {
         const inner  = document.getElementById('settingsSliderInner');
         const dots   = document.querySelectorAll('.slider-dot');
@@ -602,7 +561,6 @@ $hasProfileImage = !empty($profileImage) && file_exists(__DIR__ . '/' . $profile
         next.addEventListener('click', () => goTo(current + 1));
         dots.forEach(dot => dot.addEventListener('click', () => goTo(Number(dot.dataset.index))));
 
-        // Touch / swipe support
         let touchStartX = 0;
         inner.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
         inner.addEventListener('touchend', e => {

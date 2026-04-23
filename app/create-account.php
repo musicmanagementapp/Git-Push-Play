@@ -64,7 +64,7 @@ $title = 'Create Account | GitPushPlay';
     <main class="auth-shell">
         <section class="auth-card">
             <h1>Create Account</h1>
-            <p class="auth-subtext">Set up a username and password for the app.</p>
+            <p class="auth-subtext" style="font-size: 15px;" >Set up a username and password for the app.</p>
 
             <?php if ($message !== ''): ?>
                 <div class="auth-message">

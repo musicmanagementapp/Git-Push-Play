@@ -2,12 +2,13 @@
     {
         "id": "ecccbd993606de30",
         "userId": "09b8b5097cbc586e",
-        "stageName": "Justinator",
+        "stageName": "Justus",
         "firstName": "Justus",
         "lastName": "Hibbler",
         "city": "Ann Arbor",
         "createdAt": "2026-03-26T15:45:30+00:00",
-        "profileImage": "assets\/libs\/assets\/images\/profile\/Piggy_Burrret_-_Copy_1776198843.jpg"
+        "profileImage": "assets\/libs\/assets\/images\/profile\/Piggy_Burrret_-_Copy_1776198843.jpg",
+        "instrument": "Piano"
     },
     {
         "id": "3aae32debace95f2",
@@ -17,7 +18,20 @@
         "lastName": "Profile",
         "city": "Antarctica",
         "createdAt": "2026-03-26T15:53:22+00:00",
-        "profileImage": "assets\/images\/profile\/Screenshot_2023-09-16_204527_1776116314.png",
-        "instrument": "Piano | Guitar"
+        "profileImage": "assets\/libs\/assets\/images\/profile\/Screenshot_2024-01-06_002704_1776903000.png",
+        "instrument": "Lead Singer",
+        "bio": "This is a testing description!"
+    },
+    {
+        "id": "3b7e7a83a5800d97",
+        "userId": "fb12220b3f4553d5",
+        "stageName": "Band Member 1",
+        "firstName": "",
+        "lastName": "",
+        "city": "Ann Arbor, MI",
+        "instrument": "Guitar",
+        "bio": "I am band member 1, I play guitar!",
+        "profileImage": "assets\/libs\/assets\/images\/profile\/aid1463614-v4-1200px-Draw-an-Acoustic-Guitar-Step-15_1776900674.jpg",
+        "createdAt": "2026-04-22T23:30:27+00:00"
     }
 ]

@@ -25,8 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             write_json(memberships_path(), $memberships);
 
             $musicians = read_musicians();
-            $musicians = array_values(array_filter($musicians, fn($m) => ($m['id'] ?? '') !== $musician['id']));
-            write_json(musicians_path(), $musicians);
+            $filtered = [];
+            foreach ($musicians as $m) {
+                if (($m['id'] ?? '') !== $musician['id']) {
+                    $filtered[] = $m;
+                }
+            }
+            write_json(musicians_path(), $filtered);
         }
 
         delete_user($userId);
@@ -57,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </p>
 
         <?php if ($error !== ''): ?>
-            <div class="auth-message"><?= htmlspecialchars($error) ?></div>
+            <div class="auth-message"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
         <form method="post" action="delete_account.php">

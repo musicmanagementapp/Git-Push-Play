@@ -48,7 +48,7 @@ $title = 'Login | GitPushPlay';
 
             <div style="justify-content: center">
                 <h1>Login</h1>
-                <p>Sign in with the account you created.</p>
+                <p style="font-size: 15px;" >Sign in with the account you created.</p>
             </div>
 
             <?php if ($message !== ''): ?>
@@ -82,7 +82,7 @@ $title = 'Login | GitPushPlay';
             </form>
 
             <div class="auth-link">
-                <a href="create-account.php">Need an account? Create one</a>
+                <a href="create-account.php" style="text-decoration: none; font-size: 22px;">Need an account? Create one</a>
             </div>
         </section>
     </main>

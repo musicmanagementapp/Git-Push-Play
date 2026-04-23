@@ -25,16 +25,16 @@
 button { cursor: pointer; font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif; }
 
 .cal-header button {
-    background: rgba(139, 85, 164, 0.5);
-    color: #fff;
-    border: 1px solid rgba(170, 131, 246, 0.4);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     padding: 5px 12px;
-    border-radius: 8px;
+    border-radius: 6px;
     font-size: 14px;
-    transition: background 0.2s;
+    transition: background 0.2s, border-color 0.2s;
 }
 
-.cal-header button:hover { background: rgba(170, 131, 246, 0.5); }
+.cal-header button:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.3); }
 
 /* --- Form --- */
 .form-group { margin-bottom: 15px; }
@@ -56,7 +56,7 @@ button { cursor: pointer; font-family: 'Comic Sans MS', 'Segoe UI', cursive, san
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: rgba(170, 131, 246, 0.7);
+    border-color: rgba(255, 255, 255, 0.45);
 }
 
 .form-group input::placeholder,
@@ -67,18 +67,18 @@ button { cursor: pointer; font-family: 'Comic Sans MS', 'Segoe UI', cursive, san
 button[type="submit"] {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid rgba(170, 131, 246, 0.6);
-    border-radius: 12px;
-    background: rgba(170, 131, 246, 0.15);
-    color: lavender;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
     font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
     font-size: 1.3rem;
     transition: background 0.2s, border-color 0.2s;
 }
 
 button[type="submit"]:hover {
-    background: rgba(170, 131, 246, 0.3);
-    border-color: rgba(170, 131, 246, 0.9);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.45);
 }
 
 .checkbox-group {
@@ -163,17 +163,19 @@ button[type="submit"]:hover {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    background: rgba(170, 131, 246, 0.12);
-    border: 1px solid rgba(170, 131, 246, 0.2);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 10px 15px;
-    border-radius: 15px;
+    border-radius: 10px;
 }
 
 table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 th, td { border: 1px solid rgba(255, 255, 255, 0.1); padding: 5px; }
 th { background: rgba(0, 0, 0, 0.4); text-align: center; padding: 10px 0; color: lavender; }
 td { height: 100px; vertical-align: top; cursor: pointer; transition: background 0.2s; border-radius: 8px; color: lavender; }
-td:hover { background: rgba(170, 131, 246, 0.15); }
+td:hover { background: rgba(255, 255, 255, 0.05); }
+td.cal-today { background: rgba(255, 255, 255, 0.08); outline: 2px solid rgba(255, 255, 255, 0.35); outline-offset: -2px; }
+td.cal-today .day-num { color: #fff; }
 
 .day-num { font-weight: bold; display: block; margin-bottom: 5px; }
 
@@ -203,11 +205,11 @@ td:hover { background: rgba(170, 131, 246, 0.15); }
 }
 
 .modal-content {
-    background: linear-gradient(  90deg,  rgba(170, 131, 246, 0.2),  rgba(255, 182, 137, 0.2));
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(10, 5, 20, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(12px);
     padding: 25px;
-    border-radius: 20px;
+    border-radius: 14px;
     width: 90%;
     max-width: 500px;
     max-height: 80vh;
@@ -251,7 +253,7 @@ td:hover { background: rgba(170, 131, 246, 0.15); }
 
 .modal-event:hover { background: rgba(255, 255, 255, 0.08); }
 
-.modal-event-time { font-weight: bold; color: #aa83f6; margin-right: 10px; }
+.modal-event-time { font-weight: bold; color: rgba(255, 255, 255, 0.7); margin-right: 10px; }
 
 .modal-event-details {
     display: none;
